@@ -69,7 +69,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="css\style.css" />
-    <Content Include="html\index.html" />
+    <Content Include="index.html" />
     <Content Include="img\AI.png" />
     <Content Include="img\APP.png" />
     <Content Include="img\BongoBossLogo.png" />
@@ -98,6 +98,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="html\" />
     <Folder Include="script\" />
   </ItemGroup>
   <PropertyGroup>
