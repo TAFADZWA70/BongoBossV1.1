@@ -32,11 +32,12 @@
         </div>
         <nav class="nav-links">
             <a href="#home">Home</a>
-            <a href="#services">Services</a>
-            <a href="#workers">Workers</a>
-            <a href="#properties">Properties</a>
-            <a href="#hotels">Hotels</a>
+            <a href="#services-spotlight">Services</a>
+            <a href="#workers-spotlight">Workers</a>
+            <a href="#properties-spotlight">Properties</a>
+            <a href="#hotels-spotlight">Hotels</a>
             <a href="#photographers">Photographers</a>
+            <a href="#team">Team</a>
             <a href="#" class="login-btn">Login</a>
         </nav>
         <div class="burger" id="burger">
@@ -52,10 +53,10 @@
     <!-- SLIDING MOBILE MENU -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#home" class="menu-item">Home</a>
-        <a href="#services" class="menu-item">Services</a>
-        <a href="#workers" class="menu-item">Workers</a>
-        <a href="#properties" class="menu-item">Properties</a>
-        <a href="#hotels" class="menu-item">Hotels</a>
+        <a href="#services-spotlight" class="menu-item">Services</a>
+        <a href="#workers-spotlight" class="menu-item">Workers</a>
+        <a href="#properties-spotlight" class="menu-item">Properties</a>
+        <a href="#hotels-spotlight" class="menu-item">Hotels</a>
         <a href="#photographers" class="menu-item">Photographers</a>
         <a href="#" class="menu-item login-btn">Login</a>
     </div>
@@ -72,10 +73,10 @@
             <p class="hero-subtitle">Find trusted service providers, skilled workers, photographers, beautiful properties and hotels — all in one place.</p>
 
             <div class="hero-buttons">
-                <button class="hero-btn">Find Services</button>
-                <button class="hero-btn">Hire Workers</button>
-                <button class="hero-btn">View Properties</button>
-                <button class="hero-btn">Find Photographers</button>
+                <button class="hero-btn" onclick="location.href='#services-spotlight'">Find Services</button>
+                <button class="hero-btn" onclick="location.href='#workers-spotlight'">Hire Workers</button>
+                <button class="hero-btn" onclick="location.href='#properties-spotlight'">View Properties</button>
+                <button class="hero-btn" onclick="location.href='#photographers'">Find Photographers</button>
             </div>
 
             <div class="scroll-indicator">
@@ -136,6 +137,198 @@
         </div>
     </section>
 
+    <!-- SERVICES SPOTLIGHT SECTION -->
+    <section class="photographer-section" id="services-spotlight">
+        <div class="photographer-bg"></div>
+
+        <div class="container">
+            <div class="photographer-header">
+                <h2 class="section-title-white">Professional Services</h2>
+                <p class="section-subtitle-white">Connect with verified service providers across Africa</p>
+            </div>
+
+            <div class="photo-services-grid">
+                <div class="photo-service-card">
+                    <div class="service-icon blue">💻</div>
+                    <h3>Tech & IT Services</h3>
+                    <p>Web developers, app creators, designers, and IT support specialists</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon green">⚡</div>
+                    <h3>Home Services</h3>
+                    <p>Electricians, plumbers, HVAC technicians, and home repair experts</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon amber">🎨</div>
+                    <h3>Creative Services</h3>
+                    <p>Graphic designers, video editors, content creators, and artists</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon rose">📊</div>
+                    <h3>Business Services</h3>
+                    <p>Accountants, consultants, legal advisors, and business coaches</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon teal">🏥</div>
+                    <h3>Health & Wellness</h3>
+                    <p>Personal trainers, nutritionists, therapists, and wellness coaches</p>
+                </div>
+            </div>
+
+            <div class="photographer-cta">
+                <button class="cta-btn pulse">Browse All Services</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKERS SPOTLIGHT SECTION -->
+    <section class="photographer-section" id="workers-spotlight">
+        <div class="photographer-bg"></div>
+
+        <div class="container">
+            <div class="photographer-header">
+                <h2 class="section-title-white">Skilled Workers</h2>
+                <p class="section-subtitle-white">Hire experienced workers for any job</p>
+            </div>
+
+            <div class="photo-services-grid">
+                <div class="photo-service-card">
+                    <div class="service-icon amber">🔨</div>
+                    <h3>Construction Workers</h3>
+                    <p>Carpenters, masons, welders, and general construction labor</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon blue">🚚</div>
+                    <h3>Moving & Transport</h3>
+                    <p>Professional movers, drivers, and logistics specialists</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon green">🌿</div>
+                    <h3>Landscaping & Gardening</h3>
+                    <p>Gardeners, landscapers, and outdoor maintenance workers</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon rose">🧹</div>
+                    <h3>Cleaning Services</h3>
+                    <p>House cleaners, office cleaners, and deep cleaning specialists</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon teal">🔧</div>
+                    <h3>Maintenance & Repair</h3>
+                    <p>Handymen, appliance repair, and general maintenance workers</p>
+                </div>
+            </div>
+
+            <div class="photographer-cta">
+                <button class="cta-btn pulse">Browse All Workers</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROPERTIES SPOTLIGHT SECTION -->
+    <section class="photographer-section" id="properties-spotlight">
+        <div class="photographer-bg"></div>
+
+        <div class="container">
+            <div class="photographer-header">
+                <h2 class="section-title-white">Properties & Real Estate</h2>
+                <p class="section-subtitle-white">Find your perfect space across Africa</p>
+            </div>
+
+            <div class="photo-services-grid">
+                <div class="photo-service-card">
+                    <div class="service-icon blue">🏠</div>
+                    <h3>Houses & Apartments</h3>
+                    <p>Rent or buy houses, apartments, and residential properties</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon green">🏢</div>
+                    <h3>Commercial Spaces</h3>
+                    <p>Office spaces, retail shops, and commercial property listings</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon amber">🌾</div>
+                    <h3>Land & Plots</h3>
+                    <p>Agricultural land, residential plots, and development sites</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon rose">🛏️</div>
+                    <h3>Rooms & Shared Spaces</h3>
+                    <p>Affordable rooms, shared apartments, and co-living spaces</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon teal">🎓</div>
+                    <h3>Student Housing</h3>
+                    <p>Accommodation near universities, colleges, and campuses</p>
+                </div>
+            </div>
+
+            <div class="photographer-cta">
+                <button class="cta-btn pulse">Browse All Properties</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOTELS SPOTLIGHT SECTION -->
+    <section class="photographer-section" id="hotels-spotlight">
+        <div class="photographer-bg"></div>
+
+        <div class="container">
+            <div class="photographer-header">
+                <h2 class="section-title-white">Hotels & Tourism</h2>
+                <p class="section-subtitle-white">Discover beautiful destinations across Africa</p>
+            </div>
+
+            <div class="photo-services-grid">
+                <div class="photo-service-card">
+                    <div class="service-icon rose">🏨</div>
+                    <h3>Luxury Hotels</h3>
+                    <p>Five-star hotels, resorts, and premium accommodation experiences</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon amber">🏕️</div>
+                    <h3>Lodges & Camps</h3>
+                    <p>Safari lodges, eco-camps, and wilderness accommodations</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon blue">🏖️</div>
+                    <h3>Beach Resorts</h3>
+                    <p>Coastal hotels, beach resorts, and seaside getaways</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon green">🏡</div>
+                    <h3>Guesthouses & B&Bs</h3>
+                    <p>Cozy guesthouses, bed & breakfasts, and boutique stays</p>
+                </div>
+
+                <div class="photo-service-card">
+                    <div class="service-icon teal">🗺️</div>
+                    <h3>Tourist Attractions</h3>
+                    <p>Museums, parks, cultural sites, and must-see destinations</p>
+                </div>
+            </div>
+
+            <div class="photographer-cta">
+                <button class="cta-btn pulse">Browse All Hotels</button>
+            </div>
+        </div>
+    </section>
+
     <!-- PHOTOGRAPHER SPOTLIGHT SECTION -->
     <section class="photographer-section" id="photographers">
         <div class="photographer-bg"></div>
@@ -172,9 +365,9 @@
                 </div>
 
                 <div class="photo-service-card">
-                    <div class="service-icon teal">🎓</div>
-                    <h3>Student Housing</h3>
-                    <p>Affordable accommodations for students near campuses and universities</p>
+                    <div class="service-icon teal">🎬</div>
+                    <h3>Video Production</h3>
+                    <p>Professional videography for events, commercials, and documentaries</p>
                 </div>
             </div>
 
