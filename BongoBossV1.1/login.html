@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to BongoBoss – Africa's Marketplace for Services, Workers, Real Estate & Tourism.">
+    <title>Login - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="css/login.css" rel="stylesheet" />
+   
+</head>
+<body>
+    <div class="login-container">
+        <!-- Floating Shapes -->
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+
+        <!-- Back to Home Button -->
+        <div class="back-home">
+            <a href="index.html" class="back-btn">
+                <span>←</span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        <!-- Login Box -->
+        <div class="login-box">
+            <div class="login-header">
+                <img src="../img/BongoBossLogo.png" alt="BongoBoss Logo" class="login-logo">
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Login to your BongoBoss account</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="emailInput" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+                    </div>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password" onclick="handleForgotPassword(event)">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            </form>
+
+            <div class="divider">
+                <span>or login with</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" onclick="socialLogin('google')">
+                    🔍
+                </button>
+                <button class="social-btn" onclick="socialLogin('facebook')">
+                    📘
+                </button>
+                <button class="social-btn" onclick="socialLogin('apple')">
+                    🍎
+                </button>
+            </div>
+
+            <div class="signup-link">
+                Don't have an account? <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script/login.js"></script>
+</body>
+</html>

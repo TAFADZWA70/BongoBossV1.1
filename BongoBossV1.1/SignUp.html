@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join BongoBoss – Africa's Marketplace for Services, Workers, Real Estate & Tourism.">
+    <title>Sign Up - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="css/signup.css" rel="stylesheet" />
+   
+</head>
+<body>
+    <div class="signup-container">
+        <!-- Floating Shapes -->
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+
+        <!-- Back to Home Button -->
+        <div class="back-home">
+            <a href="index.html" class="back-btn">
+                <span>←</span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        <!-- Signup Box -->
+        <div class="signup-box">
+            <div class="signup-header">
+                <img src="../img/BongoBossLogo.png" alt="BongoBoss Logo" class="signup-logo">
+                <h1 class="signup-title">Join BongoBoss</h1>
+                <p class="signup-subtitle">Create your account and start connecting</p>
+            </div>
+
+            <!-- Account Type Selection -->
+            <div class="account-type-selector">
+                <div class="account-type-btn active" onclick="selectAccountType('customer', this)">
+                    <span class="icon">🛍️</span>
+                    <span class="label">Customer</span>
+                </div>
+                <div class="account-type-btn" onclick="selectAccountType('provider', this)">
+                    <span class="icon">💼</span>
+                    <span class="label">Service Provider</span>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ID Number / Passport</label>
+                    <input type="text" class="form-input" placeholder="Enter your Idnumber/Passporrt" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="+27 XX XXX XXXX" required>
+                </div>
+
+                <div class="form-group" id="categoryGroup" style="display: none;">
+                    <label class="form-label">Service Category</label>
+                    <select class="form-select" id="serviceCategory">
+                        <option value="">Select your service category</option>
+                        <option value="tech">Tech & IT Services</option>
+                        <option value="home">Home Services</option>
+                        <option value="creative">Creative Services</option>
+                        <option value="business">Business Services</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="construction">Construction Workers</option>
+                        <option value="transport">Moving & Transport</option>
+                        <option value="landscaping">Landscaping & Gardening</option>
+                        <option value="cleaning">Cleaning Services</option>
+                        <option value="maintenance">Maintenance & Repair</option>
+                        <option value="photography">Photography Services</option>
+                        <option value="property">Real Estate Agent</option>
+                        <option value="hotel">Hotel/Tourism</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Create a strong password" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" placeholder="Confirm your password" required>
+                </div>
+
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="signup-btn">Create Account</button>
+            </form>
+
+            <div class="divider">
+                <span>or sign up with</span>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn" onclick="socialSignup('google')">
+                    🔍
+                </button>
+                <button class="social-btn" onclick="socialSignup('facebook')">
+                    📘
+                </button>
+                <button class="social-btn" onclick="socialSignup('apple')">
+                    🍎
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="script/signup.js"></script>
+    
+</body>
+</html>

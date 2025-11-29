@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="css\login.css" />
+    <Content Include="css\signup.css" />
     <Content Include="css\style.css" />
     <Content Include="index.html" />
     <Content Include="img\AI.png" />
@@ -83,6 +85,11 @@
     <Content Include="img\tanatsirwa.jpg" />
     <Content Include="img\VAI.png" />
     <Content Include="img\WHATSAPP.png" />
+    <Content Include="login.html" />
+    <Content Include="provider-dashboard.html" />
+    <Content Include="script\login.js" />
+    <Content Include="script\signup.js" />
+    <Content Include="SignUp.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="html\" />
-    <Folder Include="script\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
