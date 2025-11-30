@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio & Services - BongoBoss Provider</title>
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="../css/portfolio.css" rel="stylesheet" />
+    <link href="../css/navfix.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- Back to Dashboard -->
+    <div class="back-to-dashboard">
+        <a href="../provider-dashboard.html" class="back-btn">
+            <span>←</span>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <div class="portfolio-container" style="margin-top: 5rem;">
+        <!-- Header -->
+        <div class="portfolio-header">
+            <h1>📁 Portfolio & Services Manager</h1>
+            <p>Showcase your work and manage your service offerings</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('portfolio')">🖼️ Portfolio</button>
+            <button class="tab-btn" onclick="showTab('categories')">📂 Categories</button>
+            <button class="tab-btn" onclick="showTab('services')">💼 Service Packages</button>
+            <button class="tab-btn" onclick="showTab('profile')">👤 Public Profile</button>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div class="tab-content active" id="portfolio-tab">
+            <button class="add-portfolio-btn" onclick="openAddPortfolioModal()">
+                <span>➕</span>
+                <span>Add Portfolio Item</span>
+            </button>
+
+            <div class="portfolio-gallery" id="portfolioGallery">
+                <!-- Sample Portfolio Items -->
+                <div class="portfolio-item">
+                    <div class="portfolio-image placeholder">
+                        📸
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-category">Wedding Photography</span>
+                        <h3 class="portfolio-title">Sarah & John's Wedding</h3>
+                        <p class="portfolio-description">Beautiful outdoor wedding ceremony captured in Cape Town</p>
+                        <div class="portfolio-actions">
+                            <button class="edit-btn">✏️ Edit</button>
+                            <button class="delete-btn">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item">
+                    <div class="portfolio-image placeholder">
+                        💻
+                    </div>
+                    <div class="portfolio-info">
+                        <span class="portfolio-category">Web Development</span>
+                        <h3 class="portfolio-title">E-Commerce Website</h3>
+                        <p class="portfolio-description">Full-stack online store with payment integration</p>
+                        <div class="portfolio-actions">
+                            <button class="edit-btn">✏️ Edit</button>
+                            <button class="delete-btn">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Tab -->
+        <div class="tab-content" id="categories-tab">
+            <div class="service-category-grid">
+                <!-- Photography Categories -->
+                <div class="category-card">
+                    <div class="category-icon">📸</div>
+                    <h3>Wedding Photography</h3>
+                    <p>Capture beautiful wedding moments</p>
+                    <span class="item-count">12 items</span>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🎉</div>
+                    <h3>Event Photography</h3>
+                    <p>Corporate and social events</p>
+                    <span class="item-count">8 items</span>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">👤</div>
+                    <h3>Portrait Photography</h3>
+                    <p>Professional headshots and portraits</p>
+                    <span class="item-count">15 items</span>
+                </div>
+
+                <!-- Web Development Categories -->
+                <div class="category-card">
+                    <div class="category-icon">💼</div>
+                    <h3>Business Websites</h3>
+                    <p>Corporate and professional sites</p>
+                    <span class="item-count">6 items</span>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🛒</div>
+                    <h3>E-Commerce</h3>
+                    <p>Online stores and marketplaces</p>
+                    <span class="item-count">4 items</span>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">📱</div>
+                    <h3>Mobile Apps</h3>
+                    <p>iOS and Android applications</p>
+                    <span class="item-count">3 items</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Packages Tab -->
+        <div class="tab-content" id="services-tab">
+            <button class="add-service-btn" onclick="openAddServiceModal()">
+                <span>➕</span>
+                <span>Add Service Package</span>
+            </button>
+
+            <div class="service-packages">
+                <!-- Sample Service Package -->
+                <div class="service-package">
+                    <div class="package-header">
+                        <h3 class="package-name">Basic Package</h3>
+                        <div class="package-price">R 2,500</div>
+                    </div>
+                    <ul class="package-features">
+                        <li>2 hours of shooting</li>
+                        <li>50 edited photos</li>
+                        <li>Online gallery</li>
+                        <li>7-day delivery</li>
+                    </ul>
+                    <div class="portfolio-actions">
+                        <button class="edit-btn">✏️ Edit</button>
+                        <button class="delete-btn">🗑️ Delete</button>
+                    </div>
+                </div>
+
+                <div class="service-package">
+                    <div class="package-header">
+                        <h3 class="package-name">Premium Package</h3>
+                        <div class="package-price">R 5,000</div>
+                    </div>
+                    <ul class="package-features">
+                        <li>Full day shooting</li>
+                        <li>200 edited photos</li>
+                        <li>Print album included</li>
+                        <li>Second photographer</li>
+                        <li>3-day delivery</li>
+                    </ul>
+                    <div class="portfolio-actions">
+                        <button class="edit-btn">✏️ Edit</button>
+                        <button class="delete-btn">🗑️ Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Public Profile Tab -->
+        <div class="tab-content" id="profile-tab">
+            <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🌐</div>
+                <h2>Your Public Profile</h2>
+                <p style="color: #666; margin-bottom: 2rem;">This is how customers will see your profile</p>
+                <button class="submit-btn" style="max-width: 300px; margin: 0 auto;">
+                    👁️ Preview Profile
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Portfolio Modal -->
+    <div class="modal" id="addPortfolioModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Portfolio Item</h2>
+                <button class="close-modal" onclick="closeModal('addPortfolioModal')">✕</button>
+            </div>
+            <form id="portfolioForm">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" required>
+                        <option value="">Select category</option>
+                        <option value="wedding">Wedding Photography</option>
+                        <option value="event">Event Photography</option>
+                        <option value="portrait">Portrait Photography</option>
+                        <option value="commercial">Commercial Photography</option>
+                        <option value="web">Web Development</option>
+                        <option value="mobile">Mobile Apps</option>
+                        <option value="design">Graphic Design</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Project Title</label>
+                    <input type="text" class="form-input" placeholder="e.g., Sarah & John's Wedding" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="Describe your project..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Upload Images</label>
+                    <div class="file-upload" onclick="document.getElementById('portfolioFile').click()">
+                        <input type="file" id="portfolioFile" accept="image/*" multiple>
+                        <div class="file-upload-icon">📁</div>
+                        <p>Click to upload images (Max 10 images)</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">✓ Add to Portfolio</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div class="modal" id="addServiceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Service Package</h2>
+                <button class="close-modal" onclick="closeModal('addServiceModal')">✕</button>
+            </div>
+            <form id="serviceForm">
+                <div class="form-group">
+                    <label class="form-label">Package Name</label>
+                    <input type="text" class="form-input" placeholder="e.g., Basic Package" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Price (R)</label>
+                    <input type="number" class="form-input" placeholder="2500" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="What's included in this package..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Features (one per line)</label>
+                    <textarea class="form-textarea" placeholder="2 hours of shooting
+50 edited photos
+Online gallery" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">✓ Add Package</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function openAddPortfolioModal() {
+            document.getElementById('addPortfolioModal').classList.add('active');
+        }
+
+        function openAddServiceModal() {
+            document.getElementById('addServiceModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Form submissions
+        document.getElementById('portfolioForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Portfolio item added! (This will save to Firebase)');
+            closeModal('addPortfolioModal');
+        });
+
+        document.getElementById('serviceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Service package added! (This will save to Firebase)');
+            closeModal('addServiceModal');
+        });
+    </script>
+</body>
+</html>
