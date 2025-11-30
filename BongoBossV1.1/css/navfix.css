@@ -1,0 +1,116 @@
+﻿@media (max-width: 768px) {
+    .hero {
+        min-height: 100vh;
+        padding: 8rem 1.5rem 3rem; /* Increased top padding to clear navbar */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.3;
+        margin-bottom: 1.2rem;
+        word-wrap: break-word;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
+        padding: 0;
+    }
+
+    .hero-btn {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .scroll-indicator {
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 100vh;
+        padding: 7rem 1rem 2rem;
+    }
+
+    .hero-title {
+        font-size: 1.8rem;
+        line-height: 1.25;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-btn {
+        padding: 0.9rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .scroll-indicator span {
+        font-size: 2rem;
+    }
+
+    /* Ensure floating shapes don't interfere */
+    .floating-shape {
+        opacity: 0.05;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .hero {
+        padding: 6.5rem 0.8rem 2rem;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .hero-btn {
+        padding: 0.85rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Very small phones (iPhone SE, etc.) */
+@media (max-width: 320px) {
+    .hero {
+        padding: 6rem 0.5rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 1.4rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+}

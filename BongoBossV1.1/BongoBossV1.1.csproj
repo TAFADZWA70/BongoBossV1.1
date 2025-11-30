@@ -69,6 +69,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="css\login.css" />
+    <Content Include="css\navfix.css" />
     <Content Include="css\signup.css" />
     <Content Include="css\style.css" />
     <Content Include="index.html" />
