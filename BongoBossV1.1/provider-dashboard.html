@@ -12,19 +12,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link href="css/provider.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Mobile Toggle -->
-    <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    <img src="../img/BongoBossLogo.png" alt="BongoBoss">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
                     <h2>BongoBoss</h2>
                 </div>
                 <div class="user-info">
@@ -38,42 +41,42 @@
 
             <nav class="sidebar-nav">
                 <a href="provider-dashboard.html" class="nav-item active">
-                    <span class="icon">📊</span>
+                    <span class="icon"><i class="fas fa-chart-line"></i></span>
                     <span class="label">Dashboard</span>
                 </a>
                 <a href="provider pages/Portfolio&Services-Management.html" class="nav-item">
-                    <span class="icon">🖼️</span>
+                    <span class="icon"><i class="fas fa-briefcase"></i></span>
                     <span class="label">Portfolio & Services</span>
                 </a>
                 <a href="bookings.html" class="nav-item">
-                    <span class="icon">📅</span>
+                    <span class="icon"><i class="fas fa-calendar-alt"></i></span>
                     <span class="label">Bookings</span>
                 </a>
                 <a href="earnings.html" class="nav-item">
-                    <span class="icon">💰</span>
+                    <span class="icon"><i class="fas fa-dollar-sign"></i></span>
                     <span class="label">Earnings</span>
                 </a>
                 <a href="reviews.html" class="nav-item">
-                    <span class="icon">⭐</span>
+                    <span class="icon"><i class="fas fa-star"></i></span>
                     <span class="label">Reviews</span>
                 </a>
                 <a href="messages.html" class="nav-item">
-                    <span class="icon">💬</span>
+                    <span class="icon"><i class="fas fa-comments"></i></span>
                     <span class="label">Messages</span>
                 </a>
                 <a href="profile.html" class="nav-item">
-                    <span class="icon">👤</span>
+                    <span class="icon"><i class="fas fa-user"></i></span>
                     <span class="label">Profile</span>
                 </a>
                 <a href="settings.html" class="nav-item">
-                    <span class="icon">⚙️</span>
+                    <span class="icon"><i class="fas fa-cog"></i></span>
                     <span class="label">Settings</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <button class="logout-btn" onclick="handleLogout()">
-                    🚪 Logout
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
         </aside>
@@ -85,7 +88,7 @@
                 <h1 id="pageTitle">Dashboard</h1>
                 <div class="top-bar-actions">
                     <button class="notification-btn">
-                        🔔
+                        <i class="fas fa-bell"></i>
                         <span class="notification-badge"></span>
                     </button>
                 </div>
@@ -94,22 +97,22 @@
             <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card blue">
-                    <div class="icon">📋</div>
+                    <div class="icon"><i class="fas fa-clipboard-list"></i></div>
                     <h3>Total Bookings</h3>
                     <div class="value" id="totalBookings">0</div>
                 </div>
                 <div class="stat-card green">
-                    <div class="icon">✅</div>
+                    <div class="icon"><i class="fas fa-check-circle"></i></div>
                     <h3>Completed</h3>
                     <div class="value" id="completedBookings">0</div>
                 </div>
                 <div class="stat-card orange">
-                    <div class="icon">⏳</div>
+                    <div class="icon"><i class="fas fa-clock"></i></div>
                     <h3>Pending</h3>
                     <div class="value" id="pendingBookings">0</div>
                 </div>
                 <div class="stat-card purple">
-                    <div class="icon">💵</div>
+                    <div class="icon"><i class="fas fa-wallet"></i></div>
                     <h3>Total Earnings</h3>
                     <div class="value">R<span id="totalEarnings">0</span></div>
                 </div>
@@ -126,7 +129,7 @@
                     <div id="bookingsList">
                         <!-- Bookings will be loaded here -->
                         <div class="empty-state">
-                            <div class="icon">📭</div>
+                            <div class="icon"><i class="fas fa-inbox"></i></div>
                             <h3>No bookings yet</h3>
                             <p>Your bookings will appear here once customers start booking your services.</p>
                         </div>
@@ -139,29 +142,29 @@
                         <h2>Quick Actions</h2>
                     </div>
                     <div class="quick-actions">
-                        <a href="portfolio.html" class="action-btn" style="text-decoration: none;">
-                            <div class="icon">🖼️</div>
+                        <a href="provider pages/Portfolio&Services-Management.html" class="action-btn">
+                            <div class="icon"><i class="fas fa-images"></i></div>
                             <div class="text">
                                 <h3>Manage Portfolio</h3>
                                 <p>Add or edit your work</p>
                             </div>
                         </a>
-                        <a href="portfolio.html#services" class="action-btn" style="text-decoration: none;">
-                            <div class="icon">➕</div>
+                        <a href="portfolio.html#services" class="action-btn">
+                            <div class="icon"><i class="fas fa-plus-circle"></i></div>
                             <div class="text">
                                 <h3>Add Service Package</h3>
                                 <p>Create pricing options</p>
                             </div>
                         </a>
-                        <a href="profile.html" class="action-btn" style="text-decoration: none;">
-                            <div class="icon">✏️</div>
+                        <a href="profile.html" class="action-btn">
+                            <div class="icon"><i class="fas fa-edit"></i></div>
                             <div class="text">
                                 <h3>Edit Profile</h3>
                                 <p>Update your information</p>
                             </div>
                         </a>
-                        <a href="earnings.html" class="action-btn" style="text-decoration: none;">
-                            <div class="icon">📊</div>
+                        <a href="earnings.html" class="action-btn">
+                            <div class="icon"><i class="fas fa-chart-bar"></i></div>
                             <div class="text">
                                 <h3>View Reports</h3>
                                 <p>Check your statistics</p>
@@ -173,5 +176,28 @@
         </main>
     </div>
     <script type="module" src="script/provider-dashboard.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function handleLogout() {
+            // Add your logout logic here
+            console.log('Logout clicked');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

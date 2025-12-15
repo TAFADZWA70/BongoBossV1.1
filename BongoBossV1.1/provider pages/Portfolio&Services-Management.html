@@ -5,180 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio & Services - BongoBoss Provider</title>
     <link rel="icon" type="image/png" href="../img/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="../css/portfolio.css" rel="stylesheet" />
-    <link href="../css/navfix.css" rel="stylesheet" />
-
 </head>
 <body>
+    <style>
+        /* Primary action buttons */
+        #addPortfolioBtn,
+        #addServiceBtn,
+        #previewProfileBtn {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+            #addPortfolioBtn:hover,
+            #addServiceBtn:hover,
+            #previewProfileBtn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            }
+
+            #addPortfolioBtn:disabled,
+            #addServiceBtn:disabled,
+            #previewProfileBtn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+    </style>
     <!-- Back to Dashboard -->
     <div class="back-to-dashboard">
         <a href="../provider-dashboard.html" class="back-btn">
-            <span>←</span>
+            <i class="fas fa-arrow-left"></i>
             <span>Back to Dashboard</span>
         </a>
     </div>
 
-    <div class="portfolio-container" style="margin-top: 5rem;">
+    <div class="portfolio-container">
         <!-- Header -->
         <div class="portfolio-header">
-            <h1>📁 Portfolio & Services Manager</h1>
+            <h1>Portfolio & Services Manager</h1>
             <p>Showcase your work and manage your service offerings</p>
         </div>
 
         <!-- Tab Navigation -->
         <div class="tab-navigation">
-            <button class="tab-btn active" onclick="showTab('portfolio')">🖼️ Portfolio</button>
-            <button class="tab-btn" onclick="showTab('categories')">📂 Categories</button>
-            <button class="tab-btn" onclick="showTab('services')">💼 Service Packages</button>
-            <button class="tab-btn" onclick="showTab('profile')">👤 Public Profile</button>
+            <button class="tab-btn active" data-tab="portfolio">
+                <i class="fas fa-images"></i>
+                <span>Portfolio</span>
+            </button>
+            <button class="tab-btn" data-tab="categories">
+                <i class="fas fa-folder"></i>
+                <span>Categories</span>
+            </button>
+            <button class="tab-btn" data-tab="services">
+                <i class="fas fa-briefcase"></i>
+                <span>Service Packages</span>
+            </button>
+            <button class="tab-btn" data-tab="profile">
+                <i class="fas fa-user"></i>
+                <span>Public Profile</span>
+            </button>
         </div>
 
         <!-- Portfolio Tab -->
         <div class="tab-content active" id="portfolio-tab">
-            <button class="add-portfolio-btn" onclick="openAddPortfolioModal()">
-                <span>➕</span>
-                <span>Add Portfolio Item</span>
-            </button>
+            <div class="section-actions">
+                <button class="btn-primary" id="addPortfolioBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Portfolio Item</span>
+                </button>
+            </div>
 
             <div class="portfolio-gallery" id="portfolioGallery">
-                <!-- Sample Portfolio Items -->
-                <div class="portfolio-item">
-                    <div class="portfolio-image placeholder">
-                        📸
-                    </div>
-                    <div class="portfolio-info">
-                        <span class="portfolio-category">Wedding Photography</span>
-                        <h3 class="portfolio-title">Sarah & John's Wedding</h3>
-                        <p class="portfolio-description">Beautiful outdoor wedding ceremony captured in Cape Town</p>
-                        <div class="portfolio-actions">
-                            <button class="edit-btn">✏️ Edit</button>
-                            <button class="delete-btn">🗑️ Delete</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image placeholder">
-                        💻
-                    </div>
-                    <div class="portfolio-info">
-                        <span class="portfolio-category">Web Development</span>
-                        <h3 class="portfolio-title">E-Commerce Website</h3>
-                        <p class="portfolio-description">Full-stack online store with payment integration</p>
-                        <div class="portfolio-actions">
-                            <button class="edit-btn">✏️ Edit</button>
-                            <button class="delete-btn">🗑️ Delete</button>
-                        </div>
-                    </div>
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading portfolio items...</p>
                 </div>
             </div>
         </div>
 
         <!-- Categories Tab -->
         <div class="tab-content" id="categories-tab">
-            <div class="service-category-grid">
-                <!-- Photography Categories -->
-                <div class="category-card">
-                    <div class="category-icon">📸</div>
-                    <h3>Wedding Photography</h3>
-                    <p>Capture beautiful wedding moments</p>
-                    <span class="item-count">12 items</span>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">🎉</div>
-                    <h3>Event Photography</h3>
-                    <p>Corporate and social events</p>
-                    <span class="item-count">8 items</span>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">👤</div>
-                    <h3>Portrait Photography</h3>
-                    <p>Professional headshots and portraits</p>
-                    <span class="item-count">15 items</span>
-                </div>
-
-                <!-- Web Development Categories -->
-                <div class="category-card">
-                    <div class="category-icon">💼</div>
-                    <h3>Business Websites</h3>
-                    <p>Corporate and professional sites</p>
-                    <span class="item-count">6 items</span>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">🛒</div>
-                    <h3>E-Commerce</h3>
-                    <p>Online stores and marketplaces</p>
-                    <span class="item-count">4 items</span>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">📱</div>
-                    <h3>Mobile Apps</h3>
-                    <p>iOS and Android applications</p>
-                    <span class="item-count">3 items</span>
+            <div class="service-category-grid" id="categoriesGrid">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading categories...</p>
                 </div>
             </div>
         </div>
 
         <!-- Service Packages Tab -->
         <div class="tab-content" id="services-tab">
-            <button class="add-service-btn" onclick="openAddServiceModal()">
-                <span>➕</span>
-                <span>Add Service Package</span>
-            </button>
+            <div class="section-actions">
+                <button class="btn-primary" id="addServiceBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Service Package</span>
+                </button>
+            </div>
 
-            <div class="service-packages">
-                <!-- Sample Service Package -->
-                <div class="service-package">
-                    <div class="package-header">
-                        <h3 class="package-name">Basic Package</h3>
-                        <div class="package-price">R 2,500</div>
-                    </div>
-                    <ul class="package-features">
-                        <li>2 hours of shooting</li>
-                        <li>50 edited photos</li>
-                        <li>Online gallery</li>
-                        <li>7-day delivery</li>
-                    </ul>
-                    <div class="portfolio-actions">
-                        <button class="edit-btn">✏️ Edit</button>
-                        <button class="delete-btn">🗑️ Delete</button>
-                    </div>
-                </div>
-
-                <div class="service-package">
-                    <div class="package-header">
-                        <h3 class="package-name">Premium Package</h3>
-                        <div class="package-price">R 5,000</div>
-                    </div>
-                    <ul class="package-features">
-                        <li>Full day shooting</li>
-                        <li>200 edited photos</li>
-                        <li>Print album included</li>
-                        <li>Second photographer</li>
-                        <li>3-day delivery</li>
-                    </ul>
-                    <div class="portfolio-actions">
-                        <button class="edit-btn">✏️ Edit</button>
-                        <button class="delete-btn">🗑️ Delete</button>
-                    </div>
+            <div class="service-packages" id="servicePackages">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading service packages...</p>
                 </div>
             </div>
         </div>
 
         <!-- Public Profile Tab -->
         <div class="tab-content" id="profile-tab">
-            <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🌐</div>
-                <h2>Your Public Profile</h2>
-                <p style="color: #666; margin-bottom: 2rem;">This is how customers will see your profile</p>
-                <button class="submit-btn" style="max-width: 300px; margin: 0 auto;">
-                    👁️ Preview Profile
+            <div class="profile-preview">
+                <div class="preview-header">
+                    <i class="fas fa-globe"></i>
+                    <h2>Your Public Profile</h2>
+                    <p>This is how customers will see your profile</p>
+                </div>
+                <button class="btn-secondary" id="previewProfileBtn">
+                    <i class="fas fa-eye"></i>
+                    <span>Preview Profile</span>
                 </button>
             </div>
         </div>
@@ -186,15 +142,18 @@
 
     <!-- Add Portfolio Modal -->
     <div class="modal" id="addPortfolioModal">
+        <div class="modal-overlay"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Add Portfolio Item</h2>
-                <button class="close-modal" onclick="closeModal('addPortfolioModal')">✕</button>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <form id="portfolioForm">
                 <div class="form-group">
-                    <label class="form-label">Category</label>
-                    <select class="form-select" required>
+                    <label class="form-label">Category *</label>
+                    <select class="form-select" id="portfolioCategory" required>
                         <option value="">Select category</option>
                         <option value="wedding">Wedding Photography</option>
                         <option value="event">Event Photography</option>
@@ -203,118 +162,214 @@
                         <option value="web">Web Development</option>
                         <option value="mobile">Mobile Apps</option>
                         <option value="design">Graphic Design</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Project Title</label>
-                    <input type="text" class="form-input" placeholder="e.g., Sarah & John's Wedding" required>
+                    <label class="form-label">Project Title *</label>
+                    <input type="text" class="form-input" id="portfolioTitle" placeholder="e.g., Corporate Website Redesign" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" placeholder="Describe your project..." required></textarea>
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="portfolioDescription" placeholder="Describe your project, the challenge, and the solution you provided..." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Upload Images</label>
-                    <div class="file-upload" onclick="document.getElementById('portfolioFile').click()">
-                        <input type="file" id="portfolioFile" accept="image/*" multiple>
-                        <div class="file-upload-icon">📁</div>
-                        <p>Click to upload images (Max 10 images)</p>
+                    <label class="form-label">Project URL (Optional)</label>
+                    <input type="url" class="form-input" id="portfolioUrl" placeholder="https://example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Upload Images *</label>
+                    <div class="file-upload" id="portfolioFileUpload">
+                        <input type="file" id="portfolioFile" accept="image/*" multiple style="display: none;">
+                        <div class="file-upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p>Click to upload images or drag and drop</p>
+                        <span class="file-info">Maximum 10 images, up to 5MB each</span>
                     </div>
+                    <div id="portfolioFilePreview" class="file-preview"></div>
                 </div>
 
-                <button type="submit" class="submit-btn">✓ Add to Portfolio</button>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelPortfolioBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        <span>Add to Portfolio</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- Add Service Modal -->
     <div class="modal" id="addServiceModal">
+        <div class="modal-overlay"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Add Service Package</h2>
-                <button class="close-modal" onclick="closeModal('addServiceModal')">✕</button>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <form id="serviceForm">
                 <div class="form-group">
-                    <label class="form-label">Package Name</label>
-                    <input type="text" class="form-input" placeholder="e.g., Basic Package" required>
+                    <label class="form-label">Package Name *</label>
+                    <input type="text" class="form-input" id="packageName" placeholder="e.g., Basic Package" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Price (R)</label>
-                    <input type="number" class="form-input" placeholder="2500" required>
+                    <label class="form-label">Price (R) *</label>
+                    <input type="number" class="form-input" id="packagePrice" placeholder="2500" min="0" step="0.01" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" placeholder="What's included in this package..." required></textarea>
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="packageDescription" placeholder="What's included in this package..." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Features (one per line)</label>
-                    <textarea class="form-textarea" placeholder="2 hours of shooting
-50 edited photos
-Online gallery" required></textarea>
+                    <label class="form-label">Features *</label>
+                    <div id="featuresContainer">
+                        <div class="feature-input-group">
+                            <input type="text" class="form-input feature-input" placeholder="e.g., 2 hours of shooting" required>
+                            <button type="button" class="btn-icon remove-feature" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-text" id="addFeatureBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Feature</span>
+                    </button>
                 </div>
 
-                <button type="submit" class="submit-btn">✓ Add Package</button>
+                <div class="form-group">
+                    <label class="form-label">Delivery Time (Days)</label>
+                    <input type="number" class="form-input" id="deliveryTime" placeholder="7" min="1">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelServiceBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        <span>Add Package</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
-    <script>
-        function showTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+    <!-- Edit Portfolio Modal -->
+    <div class="modal" id="editPortfolioModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Portfolio Item</h2>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editPortfolioForm">
+                <input type="hidden" id="editPortfolioId">
 
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+                <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <select class="form-select" id="editPortfolioCategory" required>
+                        <option value="">Select category</option>
+                        <option value="wedding">Wedding Photography</option>
+                        <option value="event">Event Photography</option>
+                        <option value="portrait">Portrait Photography</option>
+                        <option value="commercial">Commercial Photography</option>
+                        <option value="web">Web Development</option>
+                        <option value="mobile">Mobile Apps</option>
+                        <option value="design">Graphic Design</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
 
-            // Show selected tab
-            document.getElementById(tabName + '-tab').classList.add('active');
+                <div class="form-group">
+                    <label class="form-label">Project Title *</label>
+                    <input type="text" class="form-input" id="editPortfolioTitle" required>
+                </div>
 
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
+                <div class="form-group">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="editPortfolioDescription" required></textarea>
+                </div>
 
-        function openAddPortfolioModal() {
-            document.getElementById('addPortfolioModal').classList.add('active');
-        }
+                <div class="form-group">
+                    <label class="form-label">Project URL (Optional)</label>
+                    <input type="url" class="form-input" id="editPortfolioUrl">
+                </div>
 
-        function openAddServiceModal() {
-            document.getElementById('addServiceModal').classList.add('active');
-        }
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelEditPortfolioBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
+    <!-- Edit Service Modal -->
+    <div class="modal" id="editServiceModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Service Package</h2>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editServiceForm">
+                <input type="hidden" id="editServiceId">
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        }
+                <div class="form-group">
+                    <label class="form-label">Package Name *</label>
+                    <input type="text" class="form-input" id="editPackageName" required>
+                </div>
 
-        // Form submissions
-        document.getElementById('portfolioForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Portfolio item added! (This will save to Firebase)');
-            closeModal('addPortfolioModal');
-        });
+                <div class="form-group">
+                    <label class="form-label">Price (R) *</label>
+                    <input type="number" class="form-input" id="editPackagePrice" min="0" step="0.01" required>
+                </div>
 
-        document.getElementById('serviceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Service package added! (This will save to Firebase)');
-            closeModal('addServiceModal');
-        });
-    </script>
+                <div class="form-group">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="editPackageDescription" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Features *</label>
+                    <div id="editFeaturesContainer"></div>
+                    <button type="button" class="btn-text" id="addEditFeatureBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Feature</span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Delivery Time (Days)</label>
+                    <input type="number" class="form-input" id="editDeliveryTime" min="1">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelEditServiceBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../script/portfolio.js"></script>
 </body>
 </html>

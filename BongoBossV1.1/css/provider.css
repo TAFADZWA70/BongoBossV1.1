@@ -44,7 +44,8 @@ body {
 
     .sidebar-logo img {
         height: 40px;
-        filter: brightness(0) invert(1);
+        width: auto;
+        object-fit: contain;
     }
 
     .sidebar-logo h2 {
@@ -480,3 +481,4 @@ body {
     .empty-state p {
         font-size: 0.9rem;
     }
+

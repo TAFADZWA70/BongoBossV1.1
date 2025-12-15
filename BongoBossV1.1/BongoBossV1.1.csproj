@@ -74,6 +74,7 @@
     <Content Include="css\provider.css" />
     <Content Include="css\signup.css" />
     <Content Include="css\style.css" />
+    <Content Include="img\BongoBossLogoresized.png" />
     <Content Include="index.html" />
     <Content Include="img\AI.png" />
     <Content Include="img\APP.png" />
@@ -92,6 +93,7 @@
     <Content Include="provider pages\Portfolio&amp;Services-Management.html" />
     <Content Include="provider-dashboard.html" />
     <Content Include="script\login.js" />
+    <Content Include="script\portfolio.js" />
     <Content Include="script\provider-dashboard.js" />
     <Content Include="script\signup.js" />
     <Content Include="SignUp.html" />
