@@ -2,7 +2,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, set, get, update, remove, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,7 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
-const storage = getStorage(app);
 
 // Global variables
 let currentUser = null;
@@ -229,8 +227,16 @@ function closeModal(modalId) {
 function handleFileSelect(e) {
     const files = Array.from(e.target.files);
 
-    if (files.length > 10) {
-        alert('Maximum 10 images allowed');
+    // Limit to 5 images to avoid database size issues
+    if (files.length > 5) {
+        alert('Maximum 5 images allowed (due to database storage limits)');
+        return;
+    }
+
+    // Check file sizes (max 500KB per image)
+    const oversizedFiles = files.filter(file => file.size > 500000);
+    if (oversizedFiles.length > 0) {
+        alert('Each image must be under 500KB. Please compress your images.');
         return;
     }
 
@@ -306,6 +312,77 @@ function resetFeatureInputs() {
     `;
 }
 
+// Convert file to base64 with compression
+async function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                // Create canvas to compress image
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Calculate new dimensions (max 800px width/height)
+                let width = img.width;
+                let height = img.height;
+                const maxSize = 800;
+
+                if (width > height) {
+                    if (width > maxSize) {
+                        height = (height * maxSize) / width;
+                        width = maxSize;
+                    }
+                } else {
+                    if (height > maxSize) {
+                        width = (width * maxSize) / height;
+                        height = maxSize;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw and compress
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert to base64 with quality 0.7
+                const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                resolve(base64);
+            };
+
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Convert images to base64
+async function convertImagesToBase64(files) {
+    const base64Images = [];
+
+    for (const file of files) {
+        try {
+            const base64 = await fileToBase64(file);
+            base64Images.push({
+                data: base64,
+                name: file.name,
+                type: file.type
+            });
+            console.log('Image converted to base64:', file.name);
+        } catch (error) {
+            console.error('Error converting image:', error);
+            throw new Error(`Failed to process image: ${file.name}`);
+        }
+    }
+
+    return base64Images;
+}
+
 // Handle portfolio form submission
 async function handlePortfolioSubmit(e) {
     e.preventDefault();
@@ -328,8 +405,9 @@ async function handlePortfolioSubmit(e) {
             return;
         }
 
-        // Upload images
-        const imageUrls = await uploadImages(selectedFiles, 'portfolio');
+        // Convert images to base64
+        console.log('Converting images to base64...');
+        const base64Images = await convertImagesToBase64(selectedFiles);
 
         // Create portfolio item
         const portfolioRef = ref(database, `portfolios/${currentIdNumber}`);
@@ -340,7 +418,7 @@ async function handlePortfolioSubmit(e) {
             title,
             description,
             url: url || null,
-            images: imageUrls,
+            images: base64Images,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         };
@@ -355,7 +433,7 @@ async function handlePortfolioSubmit(e) {
 
     } catch (error) {
         console.error('Error adding portfolio item:', error);
-        alert('Error adding portfolio item. Please try again.');
+        alert(`Error adding portfolio item: ${error.message}`);
     } finally {
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
@@ -517,30 +595,6 @@ async function handleEditServiceSubmit(e) {
     }
 }
 
-// Upload images to Firebase Storage
-async function uploadImages(files, folder) {
-    const imageUrls = [];
-
-    for (const file of files) {
-        try {
-            const timestamp = Date.now();
-            const fileName = `${folder}/${currentIdNumber}/${timestamp}_${file.name}`;
-            const fileRef = storageRef(storage, fileName);
-
-            await uploadBytes(fileRef, file);
-            const downloadURL = await getDownloadURL(fileRef);
-            imageUrls.push(downloadURL);
-
-            console.log('Image uploaded:', downloadURL);
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            throw error;
-        }
-    }
-
-    return imageUrls;
-}
-
 // Load portfolio items
 async function loadPortfolioItems() {
     const gallery = document.getElementById('portfolioGallery');
@@ -573,11 +627,12 @@ async function loadPortfolioItems() {
             const div = document.createElement('div');
             div.className = 'portfolio-item';
 
-            const imageUrl = item.images && item.images.length > 0 ? item.images[0] : null;
+            // Get first image (base64)
+            const imageData = item.images && item.images.length > 0 ? item.images[0].data : null;
 
             div.innerHTML = `
                 <div class="portfolio-image">
-                    ${imageUrl ? `<img src="${imageUrl}" alt="${item.title}">` : '<i class="fas fa-image"></i>'}
+                    ${imageData ? `<img src="${imageData}" alt="${item.title}">` : '<i class="fas fa-image"></i>'}
                 </div>
                 <div class="portfolio-info">
                     <span class="portfolio-category">${getCategoryName(item.category)}</span>

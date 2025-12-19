@@ -94,6 +94,7 @@
     <Content Include="provider-dashboard.html" />
     <Content Include="script\login.js" />
     <Content Include="script\portfolio.js" />
+    <Content Include="script\portfoliov2.js" />
     <Content Include="script\provider-dashboard.js" />
     <Content Include="script\signup.js" />
     <Content Include="SignUp.html" />
