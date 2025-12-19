@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Services - BongoBoss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/browseservices.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>BongoBoss</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html" class="active">Browse Services</a>
+                    <a href="Customer-dashboard.html">My Dashboard</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="Customer-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                            <a href="my-bookings.html"><i class="fas fa-calendar"></i> My Bookings</a>
+                            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <hr>
+                            <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Search Section -->
+    <section class="hero-search">
+        <div class="container">
+            <h1>Find the Perfect Service Provider</h1>
+            <p>Browse thousands of talented professionals ready to bring your vision to life</p>
+
+            <div class="search-bar">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search services, providers, or categories...">
+                </div>
+                <button class="search-btn" onclick="performSearch()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <div class="filters-header">
+                        <h2>Filters</h2>
+                        <button class="clear-filters" onclick="clearFilters()">Clear All</button>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <h3>Service Category</h3>
+                        <div class="filter-options" id="categoryFilters">
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="all" checked onchange="handleCategoryFilter(this)">
+                                <span>All Categories</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="photography" onchange="handleCategoryFilter(this)">
+                                <span>Photography</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="tech" onchange="handleCategoryFilter(this)">
+                                <span>Tech & IT</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="creative" onchange="handleCategoryFilter(this)">
+                                <span>Creative Services</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="home" onchange="handleCategoryFilter(this)">
+                                <span>Home Services</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="business" onchange="handleCategoryFilter(this)">
+                                <span>Business Services</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="construction" onchange="handleCategoryFilter(this)">
+                                <span>Construction</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="cleaning" onchange="handleCategoryFilter(this)">
+                                <span>Cleaning</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="property" onchange="handleCategoryFilter(this)">
+                                <span>Real Estate</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" value="hotel" onchange="handleCategoryFilter(this)">
+                                <span>Hotel/Tourism</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Range Filter -->
+                    <div class="filter-group">
+                        <h3>Price Range</h3>
+                        <div class="price-range">
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="Min" min="0">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="Max" min="0">
+                            </div>
+                            <button class="apply-price-btn" onclick="applyPriceFilter()">Apply</button>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="filter-group">
+                        <h3>Rating</h3>
+                        <div class="filter-options">
+                            <label class="filter-checkbox">
+                                <input type="radio" name="rating" value="all" checked onchange="handleRatingFilter(this)">
+                                <span>All Ratings</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="radio" name="rating" value="4.5" onchange="handleRatingFilter(this)">
+                                <span><i class="fas fa-star"></i> 4.5 & above</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="radio" name="rating" value="4.0" onchange="handleRatingFilter(this)">
+                                <span><i class="fas fa-star"></i> 4.0 & above</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="radio" name="rating" value="3.5" onchange="handleRatingFilter(this)">
+                                <span><i class="fas fa-star"></i> 3.5 & above</span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Services Grid -->
+                <div class="services-content">
+                    <!-- Sort and View Options -->
+                    <div class="content-header">
+                        <div class="results-info">
+                            <h2>Available Services</h2>
+                            <p id="resultsCount">Loading services...</p>
+                        </div>
+                        <div class="sort-options">
+                            <label>Sort by:</label>
+                            <select id="sortSelect" onchange="handleSort()">
+                                <option value="relevance">Relevance</option>
+                                <option value="rating">Highest Rated</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="newest">Newest First</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Services Grid -->
+                    <div class="services-grid" id="servicesGrid">
+                        <!-- Services will be loaded here dynamically -->
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading services...</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination" style="display: none;">
+                        <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <div class="pagination-info" id="paginationInfo">
+                            Page 1 of 1
+                        </div>
+                        <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BongoBoss</h3>
+                    <p>Connecting customers with talented service providers.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BongoBoss. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="../script/browser-services,js.js"></script>
+   
+</body>
+</html>

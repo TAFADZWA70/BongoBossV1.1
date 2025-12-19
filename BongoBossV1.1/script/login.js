@@ -117,6 +117,8 @@ function redirectUser(accountType) {
     console.log('Redirecting user, account type:', accountType);
     if (accountType === 'provider') {
         window.location.href = 'provider-dashboard.html';
+    } else if (accountType === 'customer') {
+        window.location.href = 'Customer-dashboard.html';
     } else {
         window.location.href = 'index.html';
     }

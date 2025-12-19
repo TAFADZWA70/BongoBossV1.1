@@ -68,12 +68,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="css\browseservices.css" />
     <Content Include="css\login.css" />
     <Content Include="css\navfix.css" />
     <Content Include="css\portfolio.css" />
     <Content Include="css\provider.css" />
     <Content Include="css\signup.css" />
     <Content Include="css\style.css" />
+    <Content Include="customer pages\browse-services.html" />
+    <Content Include="Customer-dashboard.html" />
     <Content Include="img\BongoBossLogoresized.png" />
     <Content Include="index.html" />
     <Content Include="img\AI.png" />
@@ -92,6 +95,8 @@
     <Content Include="login.html" />
     <Content Include="provider pages\Portfolio&amp;Services-Management.html" />
     <Content Include="provider-dashboard.html" />
+    <Content Include="script\browser-services,js.js" />
+    <Content Include="script\customer-dashboard.js" />
     <Content Include="script\login.js" />
     <Content Include="script\portfolio.js" />
     <Content Include="script\portfoliov2.js" />

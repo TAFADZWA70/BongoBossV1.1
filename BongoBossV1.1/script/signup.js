@@ -148,6 +148,8 @@ async function handleSignup(event) {
         // Redirect based on account type
         if (accountType === 'provider') {
             window.location.href = 'provider-dashboard.html';
+        } else if (accountType === 'customer') {
+            window.location.href = 'Customer-dashboard.html';
         } else {
             window.location.href = 'index.html';
         }
