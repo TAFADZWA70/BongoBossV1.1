@@ -278,16 +278,17 @@ body {
 }
 
 /* ============================================
-   FILTERS SIDEBAR
+   FILTERS SIDEBAR - FIXED
    ============================================ */
 .filters-sidebar {
     background: white;
     border-radius: 25px;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
     height: fit-content;
     position: sticky;
     top: 100px;
+    max-width: 280px;
 }
 
 .filters-header {
@@ -321,6 +322,8 @@ body {
 
 .filter-group {
     margin-bottom: 2rem;
+    width: 100%;
+    overflow: hidden;
 }
 
     .filter-group h3 {
@@ -363,7 +366,7 @@ body {
         font-size: 0.95rem;
     }
 
-/* Price Range */
+/* Price Range - FIXED */
 .price-range {
     display: flex;
     flex-direction: column;
@@ -378,27 +381,40 @@ body {
 
     .price-inputs input {
         flex: 1;
-        padding: 0.8rem;
+        min-width: 0;
+        padding: 0.7rem 0.8rem;
         border: 2px solid #e8ebf0;
         border-radius: 10px;
         font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
         transition: all 0.3s ease;
+        box-sizing: border-box;
     }
 
-        .price-inputs input:focus {
-            outline: none;
-            border-color: var(--primary-purple);
-        }
+    .price-inputs span {
+        flex-shrink: 0;
+        color: #666;
+        font-size: 0.9rem;
+        padding: 0 0.2rem;
+    }
+
+    .price-inputs input:focus {
+        outline: none;
+        border-color: var(--primary-purple);
+    }
 
 .apply-price-btn {
+    width: 100%;
     padding: 0.8rem;
     background: linear-gradient(135deg, var(--primary-purple), var(--primary-violet));
     color: white;
     border: none;
     border-radius: 10px;
     font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
     .apply-price-btn:hover {
@@ -470,7 +486,7 @@ body {
    ============================================ */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
@@ -484,6 +500,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 480px;
 }
 
     .service-card:hover {
@@ -496,6 +513,7 @@ body {
     height: 220px;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
     .service-image img {
@@ -556,6 +574,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 260px;
 }
 
 .provider-info {
@@ -620,28 +639,34 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 1.2rem;
     margin-top: auto;
     border-top: 1px solid #f5f7fa;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow: hidden;
 }
 
 .service-price {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-purple), var(--primary-violet));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary-purple);
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
     .service-price span {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 500;
         color: #666;
     }
 
 .book-btn {
-    padding: 0.8rem 1.5rem;
+    padding: 0.7rem 1.2rem;
     background: linear-gradient(135deg, var(--primary-purple), var(--primary-violet));
     color: white;
     border: none;
@@ -650,6 +675,9 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Poppins', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 0.9rem;
 }
 
     .book-btn:hover {
@@ -814,7 +842,7 @@ body {
     }
 
     .services-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
 
@@ -825,6 +853,7 @@ body {
 
     .filters-sidebar {
         position: static;
+        max-width: 100%;
     }
 
     .content-header {
