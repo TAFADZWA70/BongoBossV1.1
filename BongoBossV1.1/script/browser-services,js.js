@@ -340,7 +340,7 @@ function createServiceCard(provider) {
     // Add click handler to view provider profile
     div.onclick = (e) => {
         if (!e.target.closest('.favorite-btn')) {
-            window.location.href = `provider-profile.html?id=${provider.providerId}`;
+            window.location.href = `../customer pages/provider-profile.html?id=${provider.providerId}`;
         }
     };
 

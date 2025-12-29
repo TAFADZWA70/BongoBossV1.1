@@ -531,7 +531,7 @@ function createServiceElement(provider) {
     // Add click handler to view provider profile
     div.style.cursor = 'pointer';
     div.onclick = () => {
-        window.location.href = `provider-profile.html?id=${provider.id}`;
+        window.location.href = `browse-services.htmml?id=${provider.id}`;
     };
 
     return div;

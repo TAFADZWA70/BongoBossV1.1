@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Service - BongoBoss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/booking.css" rel="stylesheet" />
+    <link href="../css/providerprofile.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>BongoBoss</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="../Customer-dashboard.html">My Dashboard</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="../Customer-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                            <a href="my-bookings.html"><i class="fas fa-calendar"></i> My Bookings</a>
+                            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <hr>
+                            <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-overlay">
+        <div class="loading-content">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading booking details...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="booking-container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Service Details</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Schedule</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Confirmation</div>
+                </div>
+            </div>
+
+            <!-- Booking Layout -->
+            <div class="booking-layout">
+                <!-- Left Side - Booking Form -->
+                <div class="booking-form-section">
+                    <div class="booking-card">
+                        <h2 class="section-title">Book Your Service</h2>
+
+                        <!-- Service Information -->
+                        <div class="service-info-box" id="serviceInfoBox">
+                            <div class="service-info-header">
+                                <div class="provider-avatar-small" id="providerAvatarSmall">P</div>
+                                <div>
+                                    <h3 id="serviceName">Loading...</h3>
+                                    <p id="providerName">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="service-price-display">
+                                <span class="price-label">Service Price</span>
+                                <span class="price-value" id="servicePrice">R 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Booking Form -->
+                        <form id="bookingForm">
+                            <!-- Date Selection -->
+                            <div class="form-group">
+                                <label for="bookingDate">
+                                    <i class="fas fa-calendar"></i>
+                                    Preferred Date
+                                </label>
+                                <input type="date" id="bookingDate" name="bookingDate" required>
+                            </div>
+
+                            <!-- Time Selection -->
+                            <div class="form-group">
+                                <label for="bookingTime">
+                                    <i class="fas fa-clock"></i>
+                                    Preferred Time
+                                </label>
+                                <select id="bookingTime" name="bookingTime" required>
+                                    <option value="">Select a time</option>
+                                    <option value="08:00">08:00 AM</option>
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">01:00 PM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                    <option value="17:00">05:00 PM</option>
+                                </select>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="form-group">
+                                <label for="serviceLocation">
+                                    <i class="fas fa-location-dot"></i>
+                                    Service Location
+                                </label>
+                                <input type="text" id="serviceLocation" name="serviceLocation"
+                                       placeholder="Enter your address" required>
+                            </div>
+
+                            <!-- Additional Details -->
+                            <div class="form-group">
+                                <label for="additionalNotes">
+                                    <i class="fas fa-message"></i>
+                                    Additional Notes (Optional)
+                                </label>
+                                <textarea id="additionalNotes" name="additionalNotes"
+                                          placeholder="Any specific requirements or details..."></textarea>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="form-group">
+                                <label for="contactPhone">
+                                    <i class="fas fa-phone"></i>
+                                    Contact Phone
+                                </label>
+                                <input type="tel" id="contactPhone" name="contactPhone"
+                                       placeholder="Your phone number" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn-submit-booking">
+                                <i class="fas fa-check-circle"></i>
+                                Confirm Booking
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right Side - Booking Summary -->
+                <aside class="booking-summary-section">
+                    <div class="summary-card">
+                        <h3>Booking Summary</h3>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Provider</span>
+                            <span class="summary-value" id="summaryProvider">-</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Service</span>
+                            <span class="summary-value" id="summaryService">-</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Date</span>
+                            <span class="summary-value" id="summaryDate">-</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Time</span>
+                            <span class="summary-value" id="summaryTime">-</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="summary-label">Location</span>
+                            <span class="summary-value" id="summaryLocation">-</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-total">
+                            <span class="total-label">Total Amount</span>
+                            <span class="total-value" id="summaryTotal">R 0</span>
+                        </div>
+
+                        <div class="summary-note">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Payment will be processed after service completion</p>
+                        </div>
+                    </div>
+
+                    <!-- Provider Contact Card -->
+                    <div class="provider-contact-card">
+                        <h4>Need Help?</h4>
+                        <p>Contact the provider directly</p>
+                        <button class="btn-contact-provider" onclick="contactProvider()">
+                            <i class="fas fa-message"></i>
+                            Contact Provider
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Booking Confirmed!</h2>
+            <p>Your booking has been successfully submitted.</p>
+            <p class="booking-reference">Booking Reference: <strong id="bookingReference">-</strong></p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="goToDashboard()">
+                    <i class="fas fa-home"></i>
+                    Go to Dashboard
+                </button>
+                <button class="btn-secondary" onclick="viewBookings()">
+                    <i class="fas fa-calendar"></i>
+                    View My Bookings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BongoBoss</h3>
+                    <p>Connecting customers with talented service providers.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BongoBoss. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../script/booking.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Profile - BongoBoss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/providerprofile.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>BongoBoss</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="../Customer-dashboard.html">My Dashboard</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="../Customer-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                            <a href="my-bookings.html"><i class="fas fa-calendar"></i> My Bookings</a>
+                            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <hr>
+                            <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-overlay">
+        <div class="loading-content">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading provider profile...</p>
+        </div>
+    </div>
+
+    <!-- Profile Hero Section -->
+    <section class="profile-hero" id="profileHero">
+        <div class="profile-hero-content">
+            <div class="profile-avatar-large" id="providerAvatarLarge">T</div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="providerName">Loading...</h1>
+                <p class="profile-title" id="providerTitle">Loading...</p>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="providerRating">0.0</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="providerReviews">0</span>
+                        <span class="stat-label">Reviews</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="providerJobs">0</span>
+                        <span class="stat-label">Jobs Done</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="providerExperience">0 yrs</span>
+                        <span class="stat-label">Experience</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn-primary" onclick="showBookingModal()">
+                        <i class="fas fa-calendar"></i>
+                        Book Service
+                    </button>
+                    <button class="btn-secondary" onclick="showContactModal()">
+                        <i class="fas fa-message"></i>
+                        Contact
+                    </button>
+                    <button class="btn-secondary" id="favoriteBtn" onclick="toggleProviderFavorite()">
+                        <i class="fas fa-heart"></i>
+                        <span id="favoriteBtnText">Add to Favorites</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="profile-layout">
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <!-- Contact Information -->
+                <div class="sidebar-card">
+                    <h3>Contact Information</h3>
+                    <div id="contactInfo">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Email</div>
+                                <div class="info-value" id="providerEmail">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Phone</div>
+                                <div class="info-value" id="providerPhone">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-location-dot"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Location</div>
+                                <div class="info-value" id="providerLocation">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Response Time</div>
+                                <div class="info-value" id="providerResponseTime">Within 2 hours</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="sidebar-card">
+                    <h3>Skills & Expertise</h3>
+                    <div class="skills-grid" id="providerSkills">
+                        <span class="skill-tag">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Verification Badge -->
+                <div class="sidebar-card" id="verificationBadge" style="display: none;">
+                    <h3>Verification</h3>
+                    <div class="verification-status">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verified Provider</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Profile Content -->
+            <div class="profile-main">
+                <!-- About Section -->
+                <div class="content-card">
+                    <h2>About Me</h2>
+                    <p id="providerBio">Loading provider information...</p>
+                </div>
+
+                <!-- Services Offered -->
+                <div class="content-card">
+                    <h2>Services Offered</h2>
+                    <div class="services-grid" id="servicesGrid">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading services...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio -->
+                <div class="content-card" id="portfolioSection" style="display: none;">
+                    <h2>Portfolio</h2>
+                    <div class="portfolio-grid" id="portfolioGrid">
+                        <!-- Portfolio items will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Reviews -->
+                <div class="content-card">
+                    <h2>Client Reviews (<span id="reviewCount">0</span>)</h2>
+                    <div class="reviews-list" id="reviewsList">
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <p>No reviews yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BongoBoss</h3>
+                    <p>Connecting customers with talented service providers.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BongoBoss. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../script/providerprofile.js"></script>
+</body>
+</html>
