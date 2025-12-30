@@ -400,7 +400,7 @@ function displayRecentBookings(bookings) {
     });
 }
 
-// Create booking element
+// Create booking element - FIXED VERSION
 function createBookingElement(booking) {
     const div = document.createElement('div');
     div.className = 'booking-item';
@@ -408,18 +408,26 @@ function createBookingElement(booking) {
     const statusClass = booking.status || 'pending';
     const statusText = booking.status ? booking.status.charAt(0).toUpperCase() + booking.status.slice(1) : 'Pending';
 
-    const eventDate = booking.eventDate ? new Date(booking.eventDate).toLocaleDateString() : 'Date TBD';
+    // Use bookingDate instead of eventDate (matching customer.js structure)
+    const eventDate = booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'Date TBD';
+
+    // Use servicePrice instead of price (matching customer.js structure)
+    const price = booking.servicePrice || 0;
+
+    // Use serviceName instead of packageName (matching customer.js structure)
+    const serviceName = booking.serviceName || 'Service Booking';
 
     div.innerHTML = `
         <div class="booking-header">
-            <h3 class="booking-title">${booking.packageName || 'Service Booking'}</h3>
+            <h3 class="booking-title">${serviceName}</h3>
             <span class="booking-status ${statusClass}">${statusText}</span>
         </div>
         <div class="booking-info">
             <p><strong>Customer:</strong> ${booking.customerName || 'N/A'}</p>
-            <p><strong>Event Date:</strong> ${eventDate}</p>
-            <p><strong>Price:</strong> R ${booking.price || 0}</p>
-            ${booking.location ? `<p><strong>Location:</strong> ${booking.location}</p>` : ''}
+            <p><strong>Date:</strong> ${eventDate}</p>
+            <p><strong>Time:</strong> ${booking.bookingTime || 'TBD'}</p>
+            <p><strong>Price:</strong> R ${price.toLocaleString()}</p>
+            ${booking.serviceLocation ? `<p><strong>Location:</strong> ${booking.serviceLocation}</p>` : ''}
         </div>
     `;
 

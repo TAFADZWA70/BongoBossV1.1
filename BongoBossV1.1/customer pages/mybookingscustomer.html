@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - BongoBoss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/mybookingcustomer.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>BongoBoss</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="../Customer-dashboard.html">My Dashboard</a>
+                    <a href="my-bookings.html" class="active">My Bookings</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="../Customer-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+                            <a href="my-bookings.html"><i class="fas fa-calendar"></i> My Bookings</a>
+                            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <hr>
+                            <a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>My Bookings</h1>
+                <p>Manage and track all your service bookings</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-status="all">
+                    <i class="fas fa-list"></i> All Bookings
+                </button>
+                <button class="filter-tab" data-status="pending">
+                    <i class="fas fa-clock"></i> Pending
+                </button>
+                <button class="filter-tab" data-status="confirmed">
+                    <i class="fas fa-check-circle"></i> Confirmed
+                </button>
+                <button class="filter-tab" data-status="completed">
+                    <i class="fas fa-star"></i> Completed
+                </button>
+                <button class="filter-tab" data-status="cancelled">
+                    <i class="fas fa-times-circle"></i> Cancelled
+                </button>
+            </div>
+
+            <!-- Bookings List -->
+            <div class="bookings-grid" id="bookingsGrid">
+                <!-- Loading state -->
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading your bookings...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Booking Details Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-body" id="modalBody">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content cancel-modal">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2>Cancel Booking?</h2>
+            <p>Are you sure you want to cancel this booking? This action cannot be undone.</p>
+
+            <div class="cancel-reason">
+                <label for="cancelReason">Reason for cancellation (optional):</label>
+                <textarea id="cancelReason" placeholder="Let the provider know why you're cancelling..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeCancelModal()">
+                    Keep Booking
+                </button>
+                <button class="btn-danger" onclick="confirmCancellation()">
+                    Yes, Cancel Booking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BongoBoss</h3>
+                    <p>Connecting customers with talented service providers.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="browse-services.html">Browse Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="help.html">Help Center</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BongoBoss. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../script/mybookingscustomer.js"></script>
+</body>
+</html>

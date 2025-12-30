@@ -68,9 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="css\booking.css" />
     <Content Include="css\browseservices.css" />
     <Content Include="css\customerprofile.css" />
     <Content Include="css\login.css" />
+    <Content Include="css\mybookingcustomer.css" />
+    <Content Include="css\mybookings.css" />
     <Content Include="css\navfix.css" />
     <Content Include="css\portfolio.css" />
     <Content Include="css\provider.css" />
@@ -79,6 +82,7 @@
     <Content Include="css\style.css" />
     <Content Include="customer pages\booking.html" />
     <Content Include="customer pages\browse-services.html" />
+    <Content Include="customer pages\mybookingscustomer.html" />
     <Content Include="Customer-dashboard.html" />
     <Content Include="img\BongoBossLogoresized.png" />
     <Content Include="index.html" />
@@ -96,6 +100,7 @@
     <Content Include="img\VAI.png" />
     <Content Include="img\WHATSAPP.png" />
     <Content Include="login.html" />
+    <Content Include="provider pages\mybookings.html" />
     <Content Include="provider pages\Portfolio&amp;Services-Management.html" />
     <Content Include="customer pages\provider-profile.html" />
     <Content Include="provider-dashboard.html" />
@@ -103,6 +108,8 @@
     <Content Include="script\browser-services,js.js" />
     <Content Include="script\customer-dashboard.js" />
     <Content Include="script\login.js" />
+    <Content Include="script\mybookings.js" />
+    <Content Include="script\mybookingscustomer.js" />
     <Content Include="script\portfolio.js" />
     <Content Include="script\portfoliov2.js" />
     <Content Include="script\provider-dashboard.js" />

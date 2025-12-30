@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Bookings - BongoBoss Provider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/mybookings.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>BongoBoss</h2>
+            <button class="close-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../provider-dashboard.html">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="bookings.html" class="active">
+                <i class="fas fa-calendar-check"></i> Bookings
+            </a>
+            <a href="services.html">
+                <i class="fas fa-briefcase"></i> My Services
+            </a>
+            <a href="portfolio.html">
+                <i class="fas fa-images"></i> Portfolio
+            </a>
+            <a href="earnings.html">
+                <i class="fas fa-dollar-sign"></i> Earnings
+            </a>
+            <a href="reviews.html">
+                <i class="fas fa-star"></i> Reviews
+            </a>
+            <a href="profile.html">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="page-title">
+                <h1>Manage Bookings</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">Provider</span>
+                    <span class="user-role" id="userCategory">Service Provider</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingCount">0</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon confirmed">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="confirmedCount">0</h3>
+                        <p>Confirmed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completedCount">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalCount">0</h3>
+                        <p>Total Bookings</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-status="all">
+                    <i class="fas fa-list"></i> All Bookings
+                </button>
+                <button class="filter-tab" data-status="pending">
+                    <i class="fas fa-clock"></i> Pending
+                </button>
+                <button class="filter-tab" data-status="confirmed">
+                    <i class="fas fa-check-circle"></i> Confirmed
+                </button>
+                <button class="filter-tab" data-status="completed">
+                    <i class="fas fa-star"></i> Completed
+                </button>
+                <button class="filter-tab" data-status="cancelled">
+                    <i class="fas fa-times-circle"></i> Cancelled
+                </button>
+            </div>
+
+            <!-- Bookings List -->
+            <div class="bookings-container">
+                <div class="bookings-grid" id="bookingsGrid">
+                    <!-- Loading state -->
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading bookings...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Booking Details Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-body" id="modalBody">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Accept/Reject Modal -->
+    <div class="modal" id="actionModal">
+        <div class="modal-content action-modal">
+            <div class="action-icon" id="actionIcon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="actionTitle">Confirm Action</h2>
+            <p id="actionMessage">Are you sure you want to proceed?</p>
+
+            <div class="action-notes" id="actionNotes" style="display: none;">
+                <label for="actionReason">Notes (optional):</label>
+                <textarea id="actionReason" placeholder="Add any notes or reasons..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeActionModal()">
+                    Cancel
+                </button>
+                <button class="btn-primary" id="confirmActionBtn" onclick="confirmAction()">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../script/mybookings.js"></script>
+</body>
+</html>
