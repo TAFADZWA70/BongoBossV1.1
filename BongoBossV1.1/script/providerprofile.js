@@ -27,6 +27,9 @@ let currentIdNumber = null;
 let providerId = null;
 let providerData = null;
 let isFavorited = false;
+let currentImageIndex = 0;
+let portfolioImages = [];
+let currentModalImages = [];
 
 // Get provider ID from URL
 function getProviderIdFromURL() {
@@ -34,9 +37,91 @@ function getProviderIdFromURL() {
     return urlParams.get('id');
 }
 
+// Add portfolio styles (call once on page load)
+function addPortfolioStyles() {
+    const style = document.createElement('style');
+    style.id = 'portfolio-styles';
+    style.textContent = `
+        .portfolio-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .portfolio-scroll-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .portfolio-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 4px;
+        }
+        .portfolio-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+        .portfolio-item {
+            flex: 0 0 300px;
+            height: 250px;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .portfolio-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .portfolio-nav-btn:hover {
+            background: #6366f1;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .portfolio-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .portfolio-nav-btn.prev {
+            left: 10px;
+        }
+        .portfolio-nav-btn.next {
+            right: 10px;
+        }
+        .portfolio-counter {
+            text-align: center;
+            margin-top: 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // Initialize on page load
 window.addEventListener('load', async () => {
     console.log('Page loaded');
+
+    // Add portfolio styles once
+    addPortfolioStyles();
 
     // Get provider ID from URL
     providerId = getProviderIdFromURL();
@@ -340,39 +425,239 @@ function createServiceCard(serviceId, service) {
     return div;
 }
 
-// Load provider portfolio
+// Load provider portfolios - each portfolio displayed separately
 async function loadProviderPortfolio() {
     try {
+        // Get portfolios for THIS specific provider only
         const portfolioRef = ref(database, `portfolios/${providerId}`);
         const portfolioSnapshot = await get(portfolioRef);
 
         if (!portfolioSnapshot.exists()) {
+            console.log('No portfolio found for provider:', providerId);
             return;
         }
 
         const portfolioData = portfolioSnapshot.val();
-        const portfolioGrid = document.getElementById('portfolioGrid');
         const portfolioSection = document.getElementById('portfolioSection');
+        const portfolioGrid = document.getElementById('portfolioGrid');
 
         portfolioGrid.innerHTML = '';
 
-        Object.values(portfolioData).forEach(portfolio => {
-            if (portfolio.images && portfolio.images.length > 0) {
-                portfolio.images.forEach(image => {
-                    const item = document.createElement('div');
-                    item.className = 'portfolio-item';
-                    item.innerHTML = `<img src="${image.data}" alt="${portfolio.title || 'Portfolio item'}">`;
-                    portfolioGrid.appendChild(item);
-                });
+        // Create separate gallery for each portfolio
+        Object.entries(portfolioData).forEach(([portfolioId, portfolio]) => {
+            console.log('Loading portfolio:', portfolioId);
+
+            if (portfolio.images && Array.isArray(portfolio.images) && portfolio.images.length > 0) {
+                const portfolioContainer = createPortfolioSection(portfolioId, portfolio);
+                portfolioGrid.appendChild(portfolioContainer);
             }
         });
 
         if (portfolioGrid.children.length > 0) {
             portfolioSection.style.display = 'block';
+        } else {
+            console.log('No portfolio images found for provider:', providerId);
         }
 
     } catch (error) {
-        console.error('Error loading portfolio:', error);
+        console.error('Error loading portfolio for provider', providerId, ':', error);
+    }
+}
+
+// Create a separate section for each portfolio
+function createPortfolioSection(portfolioId, portfolio) {
+    const section = document.createElement('div');
+    section.className = 'portfolio-section-item';
+    section.style.cssText = 'margin-bottom: 40px;';
+
+    // Portfolio header
+    const header = document.createElement('div');
+    header.style.cssText = 'margin-bottom: 20px;';
+    header.innerHTML = `
+        <h3 style="font-size: 20px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
+            ${portfolio.title || 'Portfolio Collection'}
+        </h3>
+        ${portfolio.description ? `
+            <p style="color: #64748b; font-size: 14px;">${portfolio.description}</p>
+        ` : ''}
+    `;
+    section.appendChild(header);
+
+    // Create gallery container for this portfolio
+    const galleryContainer = document.createElement('div');
+    galleryContainer.className = 'portfolio-gallery-container';
+    galleryContainer.style.cssText = 'position: relative; overflow: hidden;';
+
+    // Create scrollable wrapper
+    const scrollWrapper = document.createElement('div');
+    scrollWrapper.className = 'portfolio-scroll-wrapper';
+    scrollWrapper.id = `portfolio-scroll-${portfolioId}`;
+    scrollWrapper.style.cssText = `
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 10px 0;
+        scrollbar-width: thin;
+        scrollbar-color: #6366f1 #f1f5f9;
+    `;
+
+    // Store images for this specific portfolio
+    const portfolioImages = portfolio.images.map((image, index) => ({
+        src: image.data,
+        title: portfolio.title || 'Portfolio item',
+        description: portfolio.description || '',
+        portfolioId: portfolioId,
+        index: index
+    }));
+
+    // Add images to scroll wrapper
+    portfolioImages.forEach((image, index) => {
+        const item = document.createElement('div');
+        item.className = 'portfolio-item';
+        item.innerHTML = `<img src="${image.src}" alt="${image.title}">`;
+        // Store the images array in a closure to pass to modal
+        item.addEventListener('click', () => {
+            openImageModalWithImages(portfolioImages, index);
+        });
+        scrollWrapper.appendChild(item);
+    });
+
+    // Create navigation buttons for this portfolio
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'portfolio-nav-btn prev';
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prevBtn.onclick = () => scrollPortfolioSection(portfolioId, 'prev');
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'portfolio-nav-btn next';
+    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    nextBtn.onclick = () => scrollPortfolioSection(portfolioId, 'next');
+
+    // Create counter for this portfolio
+    const counter = document.createElement('div');
+    counter.className = 'portfolio-counter';
+    counter.id = `portfolio-counter-${portfolioId}`;
+    counter.textContent = `1 / ${portfolioImages.length}`;
+
+    // Assemble gallery
+    galleryContainer.appendChild(prevBtn);
+    galleryContainer.appendChild(nextBtn);
+    galleryContainer.appendChild(scrollWrapper);
+    section.appendChild(galleryContainer);
+    section.appendChild(counter);
+
+    // Update counter on scroll
+    scrollWrapper.addEventListener('scroll', () => updatePortfolioCounterForSection(portfolioId, portfolioImages.length));
+
+    return section;
+}
+
+// Scroll portfolio section by ID
+function scrollPortfolioSection(portfolioId, direction) {
+    const wrapper = document.getElementById(`portfolio-scroll-${portfolioId}`);
+    const scrollAmount = 316; // item width (300) + gap (16)
+
+    if (direction === 'prev') {
+        wrapper.scrollLeft -= scrollAmount;
+    } else {
+        wrapper.scrollLeft += scrollAmount;
+    }
+}
+
+// Update portfolio counter for specific section
+function updatePortfolioCounterForSection(portfolioId, totalImages) {
+    const wrapper = document.getElementById(`portfolio-scroll-${portfolioId}`);
+    const counter = document.getElementById(`portfolio-counter-${portfolioId}`);
+    const scrollAmount = 316;
+    const currentIndex = Math.round(wrapper.scrollLeft / scrollAmount) + 1;
+
+    if (counter) {
+        counter.textContent = `${Math.min(currentIndex, totalImages)} / ${totalImages}`;
+    }
+}
+
+// Open image modal with specific images array
+function openImageModalWithImages(images, startIndex) {
+    currentModalImages = images;
+    currentImageIndex = startIndex;
+    const image = images[startIndex];
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.id = 'imageModal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    `;
+
+    modal.innerHTML = `
+        <button onclick="closeImageModal()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001;">×</button>
+        ${images.length > 1 ? `
+            <button onclick="changeModalImage(-1)" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001; font-size: 24px;">‹</button>
+            <button onclick="changeModalImage(1)" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001; font-size: 24px;">›</button>
+        ` : ''}
+        <div style="max-width: 90%; max-height: 90%; text-align: center;">
+            <img src="${image.src}" alt="${image.title}" style="max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);">
+            <h3 style="color: white; margin-top: 16px; font-size: 20px;">${image.title}</h3>
+            ${image.description ? `<p style="color: #cbd5e1; margin-top: 8px;">${image.description}</p>` : ''}
+            ${images.length > 1 ? `<p style="color: #94a3b8; margin-top: 12px; font-size: 14px;">${startIndex + 1} / ${images.length}</p>` : ''}
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Close on click outside image
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeImageModal();
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', handleModalKeypress);
+}
+
+// Close image modal
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.remove();
+        document.removeEventListener('keydown', handleModalKeypress);
+    }
+}
+
+// Change image in modal
+function changeModalImage(direction) {
+    currentImageIndex += direction;
+
+    if (currentImageIndex < 0) {
+        currentImageIndex = currentModalImages.length - 1;
+    } else if (currentImageIndex >= currentModalImages.length) {
+        currentImageIndex = 0;
+    }
+
+    closeImageModal();
+    openImageModalWithImages(currentModalImages, currentImageIndex);
+}
+
+// Handle modal keypress
+function handleModalKeypress(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    } else if (e.key === 'ArrowLeft' && currentModalImages.length > 1) {
+        changeModalImage(-1);
+    } else if (e.key === 'ArrowRight' && currentModalImages.length > 1) {
+        changeModalImage(1);
     }
 }
 
@@ -593,5 +878,9 @@ window.bookService = bookService;
 window.showBookingModal = showBookingModal;
 window.showContactModal = showContactModal;
 window.handleLogout = handleLogout;
+window.scrollPortfolioSection = scrollPortfolioSection;
+window.openImageModalWithImages = openImageModalWithImages;
+window.closeImageModal = closeImageModal;
+window.changeModalImage = changeModalImage;
 
 console.log('Provider profile script loaded successfully!');

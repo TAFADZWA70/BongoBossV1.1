@@ -217,7 +217,7 @@ async function loadDashboardData() {
         // Load bookings
         const bookingsData = await loadBookings();
 
-        // Load earnings
+        // Load earnings (calculated from bookings)
         const earningsData = await loadEarnings();
 
         // Load portfolio count
@@ -238,7 +238,8 @@ async function loadDashboardData() {
             totalBookings: 0,
             completedBookings: 0,
             pendingBookings: 0,
-            totalEarnings: 0
+            totalEarnings: 0,
+            pendingEarnings: 0
         });
     }
 }
@@ -276,25 +277,55 @@ async function loadBookings() {
     }
 }
 
-// Load earnings from Firebase
+// Load earnings from completed bookings - UPDATED VERSION
 async function loadEarnings() {
     try {
-        console.log('Loading earnings for provider:', currentIdNumber);
+        console.log('Calculating earnings from completed bookings...');
 
-        const earningsRef = ref(database, `earnings/${currentIdNumber}`);
-        const earningsSnapshot = await get(earningsRef);
+        // Get all bookings for this provider
+        const bookingsRef = ref(database, 'bookings');
+        const bookingsSnapshot = await get(bookingsRef);
 
-        if (!earningsSnapshot.exists()) {
-            console.log('No earnings data found');
+        if (!bookingsSnapshot.exists()) {
+            console.log('No bookings found');
             return { total: 0, available: 0, pending: 0 };
         }
 
-        const earningsData = earningsSnapshot.val();
-        console.log('Loaded earnings:', earningsData);
+        const allBookings = bookingsSnapshot.val();
+
+        // Filter for this provider's bookings
+        const providerBookings = Object.keys(allBookings)
+            .map(key => ({
+                id: key,
+                ...allBookings[key]
+            }))
+            .filter(booking => booking.providerId === currentIdNumber);
+
+        // Calculate earnings from completed bookings
+        let totalEarnings = 0;
+        let pendingEarnings = 0;
+
+        providerBookings.forEach(booking => {
+            const price = booking.servicePrice || booking.price || 0;
+
+            if (booking.status === 'completed') {
+                totalEarnings += price;
+            } else if (booking.status === 'confirmed' || booking.status === 'pending') {
+                pendingEarnings += price;
+            }
+        });
+
+        const earningsData = {
+            total: totalEarnings,
+            available: totalEarnings, // All completed earnings are available
+            pending: pendingEarnings
+        };
+
+        console.log('Calculated earnings:', earningsData);
         return earningsData;
 
     } catch (error) {
-        console.error('Error loading earnings:', error);
+        console.error('Error calculating earnings:', error);
         return { total: 0, available: 0, pending: 0 };
     }
 }
@@ -341,7 +372,7 @@ function calculateStats(bookings, earnings, portfolioCount) {
     return stats;
 }
 
-// Update statistics display
+// Update statistics display - UPDATED VERSION
 function updateStats(stats) {
     console.log('Updating stats display:', stats);
 
@@ -362,7 +393,29 @@ function updateStats(stats) {
 
     const totalEarningsElement = document.getElementById('totalEarnings');
     if (totalEarningsElement) {
-        totalEarningsElement.textContent = stats.totalEarnings.toFixed(2);
+        // Format earnings with currency
+        totalEarningsElement.textContent = `R ${stats.totalEarnings.toLocaleString('en-ZA', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+    }
+
+    // If you have a pending earnings element, update it too:
+    const pendingEarningsElement = document.getElementById('pendingEarnings');
+    if (pendingEarningsElement) {
+        pendingEarningsElement.textContent = `R ${stats.pendingEarnings.toLocaleString('en-ZA', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+    }
+
+    // If you have an available earnings element:
+    const availableEarningsElement = document.getElementById('availableEarnings');
+    if (availableEarningsElement) {
+        availableEarningsElement.textContent = `R ${stats.availableEarnings.toLocaleString('en-ZA', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
     }
 }
 
@@ -426,7 +479,10 @@ function createBookingElement(booking) {
             <p><strong>Customer:</strong> ${booking.customerName || 'N/A'}</p>
             <p><strong>Date:</strong> ${eventDate}</p>
             <p><strong>Time:</strong> ${booking.bookingTime || 'TBD'}</p>
-            <p><strong>Price:</strong> R ${price.toLocaleString()}</p>
+            <p><strong>Price:</strong> R ${price.toLocaleString('en-ZA', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}</p>
             ${booking.serviceLocation ? `<p><strong>Location:</strong> ${booking.serviceLocation}</p>` : ''}
         </div>
     `;

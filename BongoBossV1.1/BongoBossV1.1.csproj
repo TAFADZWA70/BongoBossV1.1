@@ -76,6 +76,7 @@
     <Content Include="css\mybookings.css" />
     <Content Include="css\navfix.css" />
     <Content Include="css\portfolio.css" />
+    <Content Include="css\portfoliolightbox.css" />
     <Content Include="css\provider.css" />
     <Content Include="css\providerprofile.css" />
     <Content Include="css\signup.css" />

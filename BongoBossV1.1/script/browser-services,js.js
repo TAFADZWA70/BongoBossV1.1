@@ -30,6 +30,10 @@ let currentPage = 1;
 let itemsPerPage = 12;
 let favorites = [];
 
+// Image modal variables
+let currentModalImages = [];
+let currentImageIndex = 0;
+
 // Filters
 let selectedCategories = ['all'];
 let minPrice = null;
@@ -155,12 +159,28 @@ async function loadAllProviders() {
                     const portfolioRef = ref(database, `portfolios/${idNumber}`);
                     const portfolioSnapshot = await get(portfolioRef);
                     let images = [];
+                    let allPortfolioImages = [];
 
                     if (portfolioSnapshot.exists()) {
                         const portfolioData = portfolioSnapshot.val();
-                        images = Object.values(portfolioData)
-                            .filter(p => p.images && p.images.length > 0)
-                            .map(p => p.images[0].data);
+
+                        // Collect all images from all portfolios
+                        Object.values(portfolioData).forEach(portfolio => {
+                            if (portfolio.images && Array.isArray(portfolio.images)) {
+                                portfolio.images.forEach(img => {
+                                    allPortfolioImages.push({
+                                        src: img.data,
+                                        title: portfolio.title || 'Portfolio item',
+                                        description: portfolio.description || ''
+                                    });
+                                });
+                            }
+                        });
+
+                        // Get first image for thumbnail
+                        if (allPortfolioImages.length > 0) {
+                            images = [allPortfolioImages[0].src];
+                        }
                     }
 
                     // Create provider entry for each service package
@@ -176,6 +196,7 @@ async function loadAllProviders() {
                             features: service.features || [],
                             deliveryTime: service.deliveryTime,
                             image: images.length > 0 ? images[0] : null,
+                            portfolioImages: allPortfolioImages, // Store all portfolio images
                             rating: userData.rating || (4 + Math.random()).toFixed(1),
                             createdAt: service.createdAt || Date.now()
                         });
@@ -302,6 +323,7 @@ function createServiceCard(provider) {
     div.className = 'service-card';
 
     const isFavorited = favorites.includes(provider.providerId);
+    const hasPortfolio = provider.portfolioImages && provider.portfolioImages.length > 0;
 
     div.innerHTML = `
         <div class="service-image">
@@ -312,6 +334,11 @@ function createServiceCard(provider) {
             ${currentUser ? `
                 <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${provider.providerId}', this)">
                     <i class="fas fa-heart"></i>
+                </button>
+            ` : ''}
+            ${hasPortfolio ? `
+                <button class="view-portfolio-btn" onclick="viewProviderPortfolio('${provider.providerId}', event)" title="View Portfolio">
+                    <i class="fas fa-images"></i>
                 </button>
             ` : ''}
         </div>
@@ -339,12 +366,112 @@ function createServiceCard(provider) {
 
     // Add click handler to view provider profile
     div.onclick = (e) => {
-        if (!e.target.closest('.favorite-btn')) {
+        if (!e.target.closest('.favorite-btn') && !e.target.closest('.view-portfolio-btn')) {
             window.location.href = `../customer pages/provider-profile.html?id=${provider.providerId}`;
         }
     };
 
     return div;
+}
+
+// View provider portfolio
+function viewProviderPortfolio(providerId, event) {
+    event.stopPropagation();
+
+    // Find the provider
+    const provider = allProviders.find(p => p.providerId === providerId);
+
+    if (!provider || !provider.portfolioImages || provider.portfolioImages.length === 0) {
+        alert('No portfolio images available');
+        return;
+    }
+
+    // Open modal with portfolio images
+    openImageModalWithImages(provider.portfolioImages, 0);
+}
+
+// Open image modal with specific images array
+function openImageModalWithImages(images, startIndex) {
+    currentModalImages = images;
+    currentImageIndex = startIndex;
+    const image = images[startIndex];
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.id = 'imageModal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    `;
+
+    modal.innerHTML = `
+        <button onclick="closeImageModal()" style="position: absolute; top: 20px; right: 20px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001;">×</button>
+        ${images.length > 1 ? `
+            <button onclick="changeModalImage(-1)" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001; font-size: 24px;">‹</button>
+            <button onclick="changeModalImage(1)" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1001; font-size: 24px;">›</button>
+        ` : ''}
+        <div style="max-width: 90%; max-height: 90%; text-align: center;">
+            <img src="${image.src}" alt="${image.title}" style="max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);">
+            <h3 style="color: white; margin-top: 16px; font-size: 20px;">${image.title}</h3>
+            ${image.description ? `<p style="color: #cbd5e1; margin-top: 8px;">${image.description}</p>` : ''}
+            ${images.length > 1 ? `<p style="color: #94a3b8; margin-top: 12px; font-size: 14px;">${startIndex + 1} / ${images.length}</p>` : ''}
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Close on click outside image
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeImageModal();
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', handleModalKeypress);
+}
+
+// Close image modal
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.remove();
+        document.removeEventListener('keydown', handleModalKeypress);
+    }
+}
+
+// Change image in modal
+function changeModalImage(direction) {
+    currentImageIndex += direction;
+
+    if (currentImageIndex < 0) {
+        currentImageIndex = currentModalImages.length - 1;
+    } else if (currentImageIndex >= currentModalImages.length) {
+        currentImageIndex = 0;
+    }
+
+    closeImageModal();
+    openImageModalWithImages(currentModalImages, currentImageIndex);
+}
+
+// Handle modal keypress
+function handleModalKeypress(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    } else if (e.key === 'ArrowLeft' && currentModalImages.length > 1) {
+        changeModalImage(-1);
+    } else if (e.key === 'ArrowRight' && currentModalImages.length > 1) {
+        changeModalImage(1);
+    }
 }
 
 // Display empty state
@@ -570,6 +697,10 @@ window.clearFilters = clearFilters;
 window.changePage = changePage;
 window.toggleFavorite = toggleFavorite;
 window.handleLogout = handleLogout;
+window.viewProviderPortfolio = viewProviderPortfolio;
+window.openImageModalWithImages = openImageModalWithImages;
+window.closeImageModal = closeImageModal;
+window.changeModalImage = changeModalImage;
 
 // Add enter key support for search
 document.addEventListener('DOMContentLoaded', () => {
