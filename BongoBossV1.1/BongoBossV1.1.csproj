@@ -108,6 +108,7 @@
     <Content Include="script\booking.js" />
     <Content Include="script\browser-services,js.js" />
     <Content Include="script\customer-dashboard.js" />
+    <Content Include="script\jobcount.js" />
     <Content Include="script\login.js" />
     <Content Include="script\mybookings.js" />
     <Content Include="script\mybookingscustomer.js" />

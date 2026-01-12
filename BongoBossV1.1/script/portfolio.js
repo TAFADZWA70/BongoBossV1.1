@@ -23,12 +23,13 @@ const database = getDatabase(app);
 let currentUser = null;
 let currentIdNumber = null;
 let selectedFiles = [];
+let currentImageGallery = [];
+let currentImageIndex = 0;
+let currentEditingItemImages = [];
 
 // Initialize on page load
 window.addEventListener('load', async () => {
     console.log('Portfolio page loaded');
-
-    // Check authentication
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             console.log('User authenticated:', user.uid);
@@ -48,171 +49,209 @@ window.addEventListener('load', async () => {
     });
 });
 
-// Load user data
 async function loadUserData(uid) {
     try {
-        // Get ID number from userMappings
         const mappingRef = ref(database, `userMappings/${uid}`);
         const mappingSnapshot = await get(mappingRef);
-
-        if (!mappingSnapshot.exists()) {
-            throw new Error('User mapping not found');
-        }
+        if (!mappingSnapshot.exists()) throw new Error('User mapping not found');
 
         const mappingData = mappingSnapshot.val();
         currentIdNumber = mappingData.idNumber;
         console.log('Current ID Number:', currentIdNumber);
 
-        // Get full user data
         const userRef = ref(database, `users/${currentIdNumber}`);
         const userSnapshot = await get(userRef);
-
-        if (!userSnapshot.exists()) {
-            throw new Error('User data not found');
-        }
+        if (!userSnapshot.exists()) throw new Error('User data not found');
 
         currentUser = userSnapshot.val();
         console.log('User data loaded:', currentUser);
 
-        // Verify user is a provider
         if (currentUser.accountType !== 'provider') {
             throw new Error('This page is for service providers only');
         }
-
     } catch (error) {
         console.error('Error loading user data:', error);
         throw error;
     }
 }
 
-// Initialize portfolio
 async function initializePortfolio() {
     console.log('Initializing portfolio...');
-
-    // Setup event listeners
     setupEventListeners();
-
-    // Load portfolio data
     await loadPortfolioItems();
     await loadServicePackages();
     await loadCategories();
 }
 
-// Setup event listeners
 function setupEventListeners() {
-    // Tab navigation
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabName = btn.dataset.tab;
-            switchTab(tabName);
-        });
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    // Add portfolio button
-    document.getElementById('addPortfolioBtn').addEventListener('click', () => {
-        openModal('addPortfolioModal');
-    });
-
-    // Add service button
-    document.getElementById('addServiceBtn').addEventListener('click', () => {
-        openModal('addServiceModal');
-    });
-
-    // Portfolio form submission
+    document.getElementById('addPortfolioBtn').addEventListener('click', () => openModal('addPortfolioModal'));
+    document.getElementById('addServiceBtn').addEventListener('click', () => openModal('addServiceModal'));
     document.getElementById('portfolioForm').addEventListener('submit', handlePortfolioSubmit);
-
-    // Service form submission
     document.getElementById('serviceForm').addEventListener('submit', handleServiceSubmit);
-
-    // Edit portfolio form submission
     document.getElementById('editPortfolioForm').addEventListener('submit', handleEditPortfolioSubmit);
-
-    // Edit service form submission
     document.getElementById('editServiceForm').addEventListener('submit', handleEditServiceSubmit);
 
-    // File upload
     document.getElementById('portfolioFileUpload').addEventListener('click', () => {
         document.getElementById('portfolioFile').click();
     });
-
     document.getElementById('portfolioFile').addEventListener('change', handleFileSelect);
 
-    // Add feature button
-    document.getElementById('addFeatureBtn').addEventListener('click', addFeatureInput);
+    const editUpload = document.getElementById('editPortfolioFileUpload');
+    const editFile = document.getElementById('editPortfolioFile');
+    if (editUpload && editFile) {
+        editUpload.addEventListener('click', () => editFile.click());
+        editFile.addEventListener('change', handleEditFileSelect);
+    }
+
+    document.getElementById('addFeatureBtn').addEventListener('click', () => addFeatureInput(false));
     document.getElementById('addEditFeatureBtn').addEventListener('click', () => addFeatureInput(true));
 
-    // Cancel buttons
-    document.getElementById('cancelPortfolioBtn').addEventListener('click', () => {
-        closeModal('addPortfolioModal');
-    });
+    document.getElementById('cancelPortfolioBtn').addEventListener('click', () => closeModal('addPortfolioModal'));
+    document.getElementById('cancelServiceBtn').addEventListener('click', () => closeModal('addServiceModal'));
+    document.getElementById('cancelEditPortfolioBtn').addEventListener('click', () => closeModal('editPortfolioModal'));
+    document.getElementById('cancelEditServiceBtn').addEventListener('click', () => closeModal('editServiceModal'));
 
-    document.getElementById('cancelServiceBtn').addEventListener('click', () => {
-        closeModal('addServiceModal');
-    });
-
-    document.getElementById('cancelEditPortfolioBtn').addEventListener('click', () => {
-        closeModal('editPortfolioModal');
-    });
-
-    document.getElementById('cancelEditServiceBtn').addEventListener('click', () => {
-        closeModal('editServiceModal');
-    });
-
-    // Close modal buttons
     document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const modal = btn.closest('.modal');
-            closeModal(modal.id);
-        });
+        btn.addEventListener('click', () => closeModal(btn.closest('.modal').id));
     });
 
-    // Close modal on overlay click
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', () => {
-            const modal = overlay.closest('.modal');
-            closeModal(modal.id);
-        });
+        overlay.addEventListener('click', () => closeModal(overlay.closest('.modal').id));
     });
 
-    // Preview profile button
     document.getElementById('previewProfileBtn').addEventListener('click', () => {
         alert('Profile preview feature coming soon!');
     });
+
+    setupImageViewerControls();
 }
 
-// Switch tabs
+function setupImageViewerControls() {
+    const viewer = document.getElementById('imageViewerModal');
+    const closeBtn = viewer?.querySelector('.close-viewer');
+    const prevBtn = viewer?.querySelector('.viewer-prev');
+    const nextBtn = viewer?.querySelector('.viewer-next');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeImageViewer);
+    if (prevBtn) prevBtn.addEventListener('click', showPreviousImage);
+    if (nextBtn) nextBtn.addEventListener('click', showNextImage);
+
+    viewer?.addEventListener('click', (e) => {
+        if (e.target === viewer) closeImageViewer();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!viewer?.classList.contains('active')) return;
+        if (e.key === 'Escape') closeImageViewer();
+        else if (e.key === 'ArrowLeft') showPreviousImage();
+        else if (e.key === 'ArrowRight') showNextImage();
+    });
+}
+
+function openImageViewer(images, startIndex = 0) {
+    currentImageGallery = images;
+    currentImageIndex = startIndex;
+    const viewer = document.getElementById('imageViewerModal');
+    if (!viewer) return;
+    viewer.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    displayCurrentImage();
+}
+
+function displayCurrentImage() {
+    const viewer = document.getElementById('imageViewerModal');
+    const imageContainer = viewer.querySelector('.viewer-image-container');
+    const counter = viewer.querySelector('.image-counter');
+    const prevBtn = viewer.querySelector('.viewer-prev');
+    const nextBtn = viewer.querySelector('.viewer-next');
+
+    if (!currentImageGallery || currentImageGallery.length === 0) return;
+
+    const currentImage = currentImageGallery[currentImageIndex];
+    imageContainer.innerHTML = `<img src="${currentImage.data}" alt="${currentImage.name || 'Portfolio image'}">`;
+    counter.textContent = `${currentImageIndex + 1} / ${currentImageGallery.length}`;
+
+    if (currentImageGallery.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    } else {
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+        prevBtn.disabled = currentImageIndex === 0;
+        nextBtn.disabled = currentImageIndex === currentImageGallery.length - 1;
+    }
+
+    displayThumbnails();
+}
+
+function displayThumbnails() {
+    const viewer = document.getElementById('imageViewerModal');
+    const thumbnailContainer = viewer.querySelector('.viewer-thumbnails');
+
+    if (currentImageGallery.length <= 1) {
+        thumbnailContainer.style.display = 'none';
+        return;
+    }
+
+    thumbnailContainer.style.display = 'flex';
+    thumbnailContainer.innerHTML = '';
+
+    currentImageGallery.forEach((image, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `thumbnail ${index === currentImageIndex ? 'active' : ''}`;
+        thumb.innerHTML = `<img src="${image.data}" alt="Thumbnail ${index + 1}">`;
+        thumb.addEventListener('click', () => {
+            currentImageIndex = index;
+            displayCurrentImage();
+        });
+        thumbnailContainer.appendChild(thumb);
+    });
+}
+
+function showPreviousImage() {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        displayCurrentImage();
+    }
+}
+
+function showNextImage() {
+    if (currentImageIndex < currentImageGallery.length - 1) {
+        currentImageIndex++;
+        displayCurrentImage();
+    }
+}
+
+function closeImageViewer() {
+    const viewer = document.getElementById('imageViewerModal');
+    viewer.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    currentImageGallery = [];
+    currentImageIndex = 0;
+}
+
 function switchTab(tabName) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-    });
-
-    // Remove active class from all buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // Show selected tab
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`${tabName}-tab`).classList.add('active');
-
-    // Add active class to clicked button
     document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
 }
 
-// Open modal
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-// Close modal
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
 
-    // Reset forms
     if (modalId === 'addPortfolioModal') {
         document.getElementById('portfolioForm').reset();
         selectedFiles = [];
@@ -220,31 +259,44 @@ function closeModal(modalId) {
     } else if (modalId === 'addServiceModal') {
         document.getElementById('serviceForm').reset();
         resetFeatureInputs();
+    } else if (modalId === 'editPortfolioModal') {
+        selectedFiles = [];
+        currentEditingItemImages = [];
+        const preview = document.getElementById('editPortfolioFilePreview');
+        if (preview) preview.innerHTML = '';
     }
 }
 
-// Handle file selection
 function handleFileSelect(e) {
     const files = Array.from(e.target.files);
-
-    // Limit to 5 images to avoid database size issues
     if (files.length > 5) {
         alert('Maximum 5 images allowed (due to database storage limits)');
         return;
     }
-
-    // Check file sizes (max 500KB per image)
     const oversizedFiles = files.filter(file => file.size > 500000);
     if (oversizedFiles.length > 0) {
         alert('Each image must be under 500KB. Please compress your images.');
         return;
     }
-
     selectedFiles = files;
     displayFilePreview(files);
 }
 
-// Display file preview
+function handleEditFileSelect(e) {
+    const files = Array.from(e.target.files);
+    if (files.length > 5) {
+        alert('Maximum 5 images allowed (due to database storage limits)');
+        return;
+    }
+    const oversizedFiles = files.filter(file => file.size > 500000);
+    if (oversizedFiles.length > 0) {
+        alert('Each image must be under 500KB. Please compress your images.');
+        return;
+    }
+    selectedFiles = files;
+    displayEditFilePreview(files);
+}
+
 function displayFilePreview(files) {
     const preview = document.getElementById('portfolioFilePreview');
     preview.innerHTML = '';
@@ -260,29 +312,72 @@ function displayFilePreview(files) {
                     <i class="fas fa-times"></i>
                 </button>
             `;
-
-            div.querySelector('.file-preview-remove').addEventListener('click', () => {
-                removeFile(index);
-            });
-
+            div.querySelector('.file-preview-remove').addEventListener('click', () => removeFile(index));
             preview.appendChild(div);
         };
         reader.readAsDataURL(file);
     });
 }
 
-// Remove file
+function displayEditFilePreview(files) {
+    const preview = document.getElementById('editPortfolioFilePreview');
+    if (!preview) return;
+    preview.innerHTML = '<p style="margin: 10px 0; color: #666; font-size: 14px;"><strong>New images selected</strong> (will replace current images):</p>';
+
+    files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const div = document.createElement('div');
+            div.className = 'file-preview-item';
+            div.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <button type="button" class="file-preview-remove" data-index="${index}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            div.querySelector('.file-preview-remove').addEventListener('click', () => removeEditFile(index));
+            preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function displayCurrentEditImages() {
+    const container = document.getElementById('editCurrentImagesContainer');
+    if (!container || !currentEditingItemImages || currentEditingItemImages.length === 0) {
+        if (container) container.innerHTML = '<p style="color: #666; font-size: 14px;">No images</p>';
+        return;
+    }
+
+    container.innerHTML = '<p style="margin-bottom: 10px; color: #666; font-size: 14px;"><strong>Current images:</strong></p>';
+
+    currentEditingItemImages.forEach((image, index) => {
+        const div = document.createElement('div');
+        div.className = 'file-preview-item';
+        div.innerHTML = `
+            <img src="${image.data}" alt="${image.name || 'Image'}">
+            <div class="image-preview-overlay">
+                <button type="button" class="btn-icon" onclick="openImageViewer(currentEditingItemImages, ${index})" title="View full size">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
 function removeFile(index) {
     selectedFiles.splice(index, 1);
     displayFilePreview(selectedFiles);
 }
 
-// Add feature input
-function addFeatureInput(isEdit = false) {
-    const container = isEdit ?
-        document.getElementById('editFeaturesContainer') :
-        document.getElementById('featuresContainer');
+function removeEditFile(index) {
+    selectedFiles.splice(index, 1);
+    displayEditFilePreview(selectedFiles);
+}
 
+function addFeatureInput(isEdit = false) {
+    const container = isEdit ? document.getElementById('editFeaturesContainer') : document.getElementById('featuresContainer');
     const div = document.createElement('div');
     div.className = 'feature-input-group';
     div.innerHTML = `
@@ -291,15 +386,10 @@ function addFeatureInput(isEdit = false) {
             <i class="fas fa-times"></i>
         </button>
     `;
-
-    div.querySelector('.remove-feature').addEventListener('click', () => {
-        div.remove();
-    });
-
+    div.querySelector('.remove-feature').addEventListener('click', () => div.remove());
     container.appendChild(div);
 }
 
-// Reset feature inputs
 function resetFeatureInputs() {
     const container = document.getElementById('featuresContainer');
     container.innerHTML = `
@@ -312,19 +402,14 @@ function resetFeatureInputs() {
     `;
 }
 
-// Convert file to base64 with compression
 async function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
         reader.onload = (e) => {
             const img = new Image();
             img.onload = () => {
-                // Create canvas to compress image
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-
-                // Calculate new dimensions (max 800px width/height)
                 let width = img.width;
                 let height = img.height;
                 const maxSize = 800;
@@ -343,50 +428,35 @@ async function fileToBase64(file) {
 
                 canvas.width = width;
                 canvas.height = height;
-
-                // Draw and compress
                 ctx.drawImage(img, 0, 0, width, height);
-
-                // Convert to base64 with quality 0.7
                 const base64 = canvas.toDataURL('image/jpeg', 0.7);
                 resolve(base64);
             };
-
             img.onerror = reject;
             img.src = e.target.result;
         };
-
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
 }
 
-// Convert images to base64
 async function convertImagesToBase64(files) {
     const base64Images = [];
-
     for (const file of files) {
         try {
             const base64 = await fileToBase64(file);
-            base64Images.push({
-                data: base64,
-                name: file.name,
-                type: file.type
-            });
+            base64Images.push({ data: base64, name: file.name, type: file.type });
             console.log('Image converted to base64:', file.name);
         } catch (error) {
             console.error('Error converting image:', error);
             throw new Error(`Failed to process image: ${file.name}`);
         }
     }
-
     return base64Images;
 }
 
-// Handle portfolio form submission
 async function handlePortfolioSubmit(e) {
     e.preventDefault();
-
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>';
@@ -405,18 +475,14 @@ async function handlePortfolioSubmit(e) {
             return;
         }
 
-        // Convert images to base64
         console.log('Converting images to base64...');
         const base64Images = await convertImagesToBase64(selectedFiles);
 
-        // Create portfolio item
         const portfolioRef = ref(database, `portfolios/${currentIdNumber}`);
         const newPortfolioRef = push(portfolioRef);
 
         const portfolioData = {
-            category,
-            title,
-            description,
+            category, title, description,
             url: url || null,
             images: base64Images,
             createdAt: serverTimestamp(),
@@ -424,13 +490,10 @@ async function handlePortfolioSubmit(e) {
         };
 
         await set(newPortfolioRef, portfolioData);
-
         console.log('Portfolio item added successfully');
         alert('Portfolio item added successfully!');
-
         closeModal('addPortfolioModal');
         await loadPortfolioItems();
-
     } catch (error) {
         console.error('Error adding portfolio item:', error);
         alert(`Error adding portfolio item: ${error.message}`);
@@ -440,10 +503,8 @@ async function handlePortfolioSubmit(e) {
     }
 }
 
-// Handle service form submission
 async function handleServiceSubmit(e) {
     e.preventDefault();
-
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>';
@@ -455,7 +516,6 @@ async function handleServiceSubmit(e) {
         const description = document.getElementById('packageDescription').value;
         const deliveryTime = document.getElementById('deliveryTime').value;
 
-        // Get features
         const featureInputs = document.querySelectorAll('#featuresContainer .feature-input');
         const features = Array.from(featureInputs).map(input => input.value).filter(val => val.trim());
 
@@ -466,28 +526,21 @@ async function handleServiceSubmit(e) {
             return;
         }
 
-        // Create service package
         const servicesRef = ref(database, `servicePackages/${currentIdNumber}`);
         const newServiceRef = push(servicesRef);
 
         const serviceData = {
-            packageName,
-            price,
-            description,
-            features,
+            packageName, price, description, features,
             deliveryTime: deliveryTime ? parseInt(deliveryTime) : null,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         };
 
         await set(newServiceRef, serviceData);
-
         console.log('Service package added successfully');
         alert('Service package added successfully!');
-
         closeModal('addServiceModal');
         await loadServicePackages();
-
     } catch (error) {
         console.error('Error adding service package:', error);
         alert('Error adding service package. Please try again.');
@@ -497,10 +550,8 @@ async function handleServiceSubmit(e) {
     }
 }
 
-// Handle edit portfolio form submission
 async function handleEditPortfolioSubmit(e) {
     e.preventDefault();
-
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>';
@@ -516,21 +567,23 @@ async function handleEditPortfolioSubmit(e) {
         const portfolioRef = ref(database, `portfolios/${currentIdNumber}/${portfolioId}`);
 
         const updates = {
-            category,
-            title,
-            description,
+            category, title, description,
             url: url || null,
             updatedAt: serverTimestamp()
         };
 
-        await update(portfolioRef, updates);
+        if (selectedFiles.length > 0) {
+            console.log('Converting new images to base64...');
+            const base64Images = await convertImagesToBase64(selectedFiles);
+            updates.images = base64Images;
+        }
 
+        await update(portfolioRef, updates);
         console.log('Portfolio item updated successfully');
         alert('Portfolio item updated successfully!');
-
         closeModal('editPortfolioModal');
+        selectedFiles = [];
         await loadPortfolioItems();
-
     } catch (error) {
         console.error('Error updating portfolio item:', error);
         alert('Error updating portfolio item. Please try again.');
@@ -540,10 +593,8 @@ async function handleEditPortfolioSubmit(e) {
     }
 }
 
-// Handle edit service form submission
 async function handleEditServiceSubmit(e) {
     e.preventDefault();
-
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>';
@@ -556,7 +607,6 @@ async function handleEditServiceSubmit(e) {
         const description = document.getElementById('editPackageDescription').value;
         const deliveryTime = document.getElementById('editDeliveryTime').value;
 
-        // Get features
         const featureInputs = document.querySelectorAll('#editFeaturesContainer .feature-input');
         const features = Array.from(featureInputs).map(input => input.value).filter(val => val.trim());
 
@@ -568,24 +618,17 @@ async function handleEditServiceSubmit(e) {
         }
 
         const serviceRef = ref(database, `servicePackages/${currentIdNumber}/${serviceId}`);
-
         const updates = {
-            packageName,
-            price,
-            description,
-            features,
+            packageName, price, description, features,
             deliveryTime: deliveryTime ? parseInt(deliveryTime) : null,
             updatedAt: serverTimestamp()
         };
 
         await update(serviceRef, updates);
-
         console.log('Service package updated successfully');
         alert('Service package updated successfully!');
-
         closeModal('editServiceModal');
         await loadServicePackages();
-
     } catch (error) {
         console.error('Error updating service package:', error);
         alert('Error updating service package. Please try again.');
@@ -595,7 +638,6 @@ async function handleEditServiceSubmit(e) {
     }
 }
 
-// Load portfolio items
 async function loadPortfolioItems() {
     const gallery = document.getElementById('portfolioGallery');
     gallery.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading portfolio items...</p></div>';
@@ -616,23 +658,22 @@ async function loadPortfolioItems() {
         }
 
         const portfolioData = snapshot.val();
-        const portfolioItems = Object.keys(portfolioData).map(key => ({
-            id: key,
-            ...portfolioData[key]
-        }));
+        const portfolioItems = Object.keys(portfolioData).map(key => ({ id: key, ...portfolioData[key] }));
 
         gallery.innerHTML = '';
 
         portfolioItems.forEach(item => {
             const div = document.createElement('div');
             div.className = 'portfolio-item';
-
-            // Get first image (base64)
             const imageData = item.images && item.images.length > 0 ? item.images[0].data : null;
+            const imageCount = item.images ? item.images.length : 0;
 
             div.innerHTML = `
-                <div class="portfolio-image">
-                    ${imageData ? `<img src="${imageData}" alt="${item.title}">` : '<i class="fas fa-image"></i>'}
+                <div class="portfolio-image" data-item-id="${item.id}">
+                    ${imageData ? `
+                        <img src="${imageData}" alt="${item.title}">
+                        ${imageCount > 1 ? `<span class="image-count-badge"><i class="fas fa-images"></i> ${imageCount}</span>` : ''}
+                    ` : '<i class="fas fa-image"></i>'}
                 </div>
                 <div class="portfolio-info">
                     <span class="portfolio-category">${getCategoryName(item.category)}</span>
@@ -650,13 +691,17 @@ async function loadPortfolioItems() {
                 </div>
             `;
 
-            // Add event listeners
+            const imageElement = div.querySelector('.portfolio-image');
+            if (imageData) {
+                imageElement.style.cursor = 'pointer';
+                imageElement.addEventListener('click', () => openImageViewer(item.images, 0));
+            }
+
             div.querySelector('.edit-btn').addEventListener('click', () => editPortfolioItem(item));
             div.querySelector('.delete-btn').addEventListener('click', () => deletePortfolioItem(item.id));
 
             gallery.appendChild(div);
         });
-
     } catch (error) {
         console.error('Error loading portfolio items:', error);
         gallery.innerHTML = `
@@ -669,7 +714,6 @@ async function loadPortfolioItems() {
     }
 }
 
-// Load service packages
 async function loadServicePackages() {
     const container = document.getElementById('servicePackages');
     container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading service packages...</p></div>';
@@ -690,10 +734,7 @@ async function loadServicePackages() {
         }
 
         const servicesData = snapshot.val();
-        const services = Object.keys(servicesData).map(key => ({
-            id: key,
-            ...servicesData[key]
-        }));
+        const services = Object.keys(servicesData).map(key => ({ id: key, ...servicesData[key] }));
 
         container.innerHTML = '';
 
@@ -721,13 +762,11 @@ async function loadServicePackages() {
                 </div>
             `;
 
-            // Add event listeners
             div.querySelector('.edit-btn').addEventListener('click', () => editServicePackage(service));
             div.querySelector('.delete-btn').addEventListener('click', () => deleteServicePackage(service.id));
 
             container.appendChild(div);
         });
-
     } catch (error) {
         console.error('Error loading service packages:', error);
         container.innerHTML = `
@@ -740,12 +779,10 @@ async function loadServicePackages() {
     }
 }
 
-// Load categories
 async function loadCategories() {
     const container = document.getElementById('categoriesGrid');
 
     try {
-        // Get portfolio items to count by category
         const portfolioRef = ref(database, `portfolios/${currentIdNumber}`);
         const snapshot = await get(portfolioRef);
 
@@ -774,7 +811,6 @@ async function loadCategories() {
 
         categories.forEach(category => {
             const count = categoryCounts[category.id] || 0;
-
             const div = document.createElement('div');
             div.className = 'category-card';
             div.innerHTML = `
@@ -785,16 +821,13 @@ async function loadCategories() {
                 <p>${category.description}</p>
                 <span class="item-count">${count} ${count === 1 ? 'item' : 'items'}</span>
             `;
-
             container.appendChild(div);
         });
-
     } catch (error) {
         console.error('Error loading categories:', error);
     }
 }
 
-// Get category name
 function getCategoryName(categoryId) {
     const categories = {
         'wedding': 'Wedding Photography',
@@ -809,7 +842,6 @@ function getCategoryName(categoryId) {
     return categories[categoryId] || categoryId;
 }
 
-// Edit portfolio item
 function editPortfolioItem(item) {
     document.getElementById('editPortfolioId').value = item.id;
     document.getElementById('editPortfolioCategory').value = item.category;
@@ -817,10 +849,16 @@ function editPortfolioItem(item) {
     document.getElementById('editPortfolioDescription').value = item.description;
     document.getElementById('editPortfolioUrl').value = item.url || '';
 
+    currentEditingItemImages = item.images || [];
+    displayCurrentEditImages();
+
+    const preview = document.getElementById('editPortfolioFilePreview');
+    if (preview) preview.innerHTML = '';
+    selectedFiles = [];
+
     openModal('editPortfolioModal');
 }
 
-// Edit service package
 function editServicePackage(service) {
     document.getElementById('editServiceId').value = service.id;
     document.getElementById('editPackageName').value = service.packageName;
@@ -828,7 +866,6 @@ function editServicePackage(service) {
     document.getElementById('editPackageDescription').value = service.description;
     document.getElementById('editDeliveryTime').value = service.deliveryTime || '';
 
-    // Populate features
     const container = document.getElementById('editFeaturesContainer');
     container.innerHTML = '';
 
@@ -841,56 +878,48 @@ function editServicePackage(service) {
                 <i class="fas fa-times"></i>
             </button>
         `;
-
         if (index > 0) {
             div.querySelector('.remove-feature').addEventListener('click', () => div.remove());
         }
-
         container.appendChild(div);
     });
 
     openModal('editServiceModal');
 }
 
-// Delete portfolio item
 async function deletePortfolioItem(itemId) {
-    if (!confirm('Are you sure you want to delete this portfolio item?')) {
-        return;
-    }
+    if (!confirm('Are you sure you want to delete this portfolio item?')) return;
 
     try {
         const portfolioRef = ref(database, `portfolios/${currentIdNumber}/${itemId}`);
         await remove(portfolioRef);
-
         console.log('Portfolio item deleted successfully');
         alert('Portfolio item deleted successfully!');
         await loadPortfolioItems();
         await loadCategories();
-
     } catch (error) {
         console.error('Error deleting portfolio item:', error);
         alert('Error deleting portfolio item. Please try again.');
     }
 }
 
-// Delete service package
 async function deleteServicePackage(serviceId) {
-    if (!confirm('Are you sure you want to delete this service package?')) {
-        return;
-    }
+    if (!confirm('Are you sure you want to delete this service package?')) return;
 
     try {
         const serviceRef = ref(database, `servicePackages/${currentIdNumber}/${serviceId}`);
         await remove(serviceRef);
-
         console.log('Service package deleted successfully');
         alert('Service package deleted successfully!');
         await loadServicePackages();
-
     } catch (error) {
         console.error('Error deleting service package:', error);
         alert('Error deleting service package. Please try again.');
     }
 }
+
+// Make functions globally accessible
+window.openImageViewer = openImageViewer;
+window.currentEditingItemImages = currentEditingItemImages;
 
 console.log('Portfolio script loaded successfully!');

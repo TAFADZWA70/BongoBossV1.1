@@ -43,7 +43,6 @@
                 cursor: not-allowed;
                 transform: none;
             }
-
     </style>
     <!-- Back to Dashboard -->
     <div class="back-to-dashboard">
@@ -305,6 +304,20 @@
                     <label class="form-label">Project URL (Optional)</label>
                     <input type="url" class="form-input" id="editPortfolioUrl">
                 </div>
+                <!-- Inside editPortfolioModal, after the URL field -->
+                <div class="form-group">
+                    <label class="form-label">Current Images</label>
+                    <div id="editCurrentImagesContainer" class="file-preview-container"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Change Images (Optional)</label>
+                    <button type="button" id="editPortfolioFileUpload" class="btn-secondary">
+                        <i class="fas fa-images"></i> Select New Images
+                    </button>
+                    <input type="file" id="editPortfolioFile" accept="image/*" multiple style="display: none;">
+                    <div id="editPortfolioFilePreview" class="file-preview-container"></div>
+                </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" id="cancelEditPortfolioBtn">Cancel</button>
@@ -358,6 +371,20 @@
                     <label class="form-label">Delivery Time (Days)</label>
                     <input type="number" class="form-input" id="editDeliveryTime" min="1">
                 </div>
+                <!-- Inside editPortfolioModal, after the URL field -->
+                <div class="form-group">
+                    <label class="form-label">Current Images</label>
+                    <div id="editCurrentImagesContainer" class="file-preview-container"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Change Images (Optional)</label>
+                    <button type="button" id="editPortfolioFileUpload" class="btn-secondary">
+                        <i class="fas fa-images"></i> Select New Images
+                    </button>
+                    <input type="file" id="editPortfolioFile" accept="image/*" multiple style="display: none;">
+                    <div id="editPortfolioFilePreview" class="file-preview-container"></div>
+                </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" id="cancelEditServiceBtn">Cancel</button>
@@ -367,6 +394,27 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+    <!-- Image Viewer Modal (add before closing </body>) -->
+    <div id="imageViewerModal" class="modal">
+        <div class="modal-content image-viewer-content">
+            <button class="close-viewer">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <button class="viewer-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="viewer-image-container"></div>
+
+            <button class="viewer-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="image-counter"></div>
+            <div class="viewer-thumbnails"></div>
         </div>
     </div>
 
