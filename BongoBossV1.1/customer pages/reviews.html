@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BongoBoss Reviews - Rate and review your completed services">
+    <title>My Reviews - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/reviews.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userRole">Customer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../Customer-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../customer pages/browse-services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                    <span class="label">Browse Services</span>
+                </a>
+                <a href="../customer pages/mybookingscustomer.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">My Bookings</span>
+                </a>
+                <a href="../customer pages/reviews.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="reviews.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">My Reviews</span>
+                </a>
+                <a href="../customer pages/CustomerProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1>My Reviews</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="icon"><i class="fas fa-star"></i></div>
+                    <div>
+                        <h3>Total Reviews</h3>
+                        <div class="value" id="totalReviews">0</div>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h3>Pending Reviews</h3>
+                        <div class="value" id="pendingReviews">0</div>
+                    </div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="icon"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <h3>Average Rating</h3>
+                        <div class="value" id="averageRating">0.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="pending">
+                        <i class="fas fa-clock"></i> Pending Reviews
+                    </button>
+                    <button class="filter-tab" data-filter="submitted">
+                        <i class="fas fa-check-circle"></i> My Reviews
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reviews Content -->
+            <div class="reviews-container">
+                <!-- Pending Reviews Section -->
+                <div id="pendingSection" class="reviews-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-clock"></i> Services to Review</h2>
+                        <p>Rate your completed bookings</p>
+                    </div>
+                    <div id="pendingReviewsList" class="reviews-grid">
+                        <!-- Pending reviews will be loaded here -->
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-check"></i>
+                            <h3>No pending reviews</h3>
+                            <p>You've reviewed all your completed services!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submitted Reviews Section -->
+                <div id="submittedSection" class="reviews-section" style="display: none;">
+                    <div class="section-header">
+                        <h2><i class="fas fa-star"></i> Your Reviews</h2>
+                        <p>Reviews you've submitted</p>
+                    </div>
+                    <div id="submittedReviewsList" class="reviews-grid">
+                        <!-- Submitted reviews will be loaded here -->
+                        <div class="empty-state">
+                            <i class="fas fa-star-half-alt"></i>
+                            <h3>No reviews yet</h3>
+                            <p>Your submitted reviews will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-star"></i> Write a Review</h2>
+                <button class="modal-close" onclick="closeReviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="service-info-card">
+                    <div class="service-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="service-details">
+                        <h3 id="reviewServiceName">Service Name</h3>
+                        <p id="reviewProviderName">Provider Name</p>
+                        <span id="reviewServiceDate" class="service-date">Date</span>
+                    </div>
+                </div>
+
+                <div class="review-form">
+                    <div class="form-group">
+                        <label>How would you rate this service?</label>
+                        <div class="star-rating" id="starRating">
+                            <i class="fas fa-star" data-rating="1"></i>
+                            <i class="fas fa-star" data-rating="2"></i>
+                            <i class="fas fa-star" data-rating="3"></i>
+                            <i class="fas fa-star" data-rating="4"></i>
+                            <i class="fas fa-star" data-rating="5"></i>
+                        </div>
+                        <div class="rating-text" id="ratingText">Select a rating</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" placeholder="Summarize your experience..." maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" rows="5" placeholder="Share details about your experience with this service..." maxlength="500"></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/500
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="closeReviewModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn-primary" id="submitReviewBtn" onclick="submitReview()">
+                            <i class="fas fa-paper-plane"></i> Submit Review
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Review Modal -->
+    <div class="modal" id="viewReviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-star"></i> Review Details</h2>
+                <button class="modal-close" onclick="closeViewReviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="viewReviewBody">
+                <!-- Review details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../script/reviews.js"></script>
+</body>
+</html>

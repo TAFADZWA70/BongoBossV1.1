@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BongoBoss Favorites - Your saved providers and services">
+    <title>My Favorites - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="../css/provider.css" rel="stylesheet" />
+    <link href="../css/favorites.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userRole">Customer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../Customer-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../customer pages/browse-services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                    <span class="label">Browse Services</span>
+                </a>
+                <a href="../customer pages/mybookingscustomer.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">My Bookings</span>
+                </a>
+                <a href="favorites.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-heart"></i></span>
+                    <span class="label">Favorites</span>
+                </a>
+                <a href="../message.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="../customer pages/reviews.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">My Reviews</span>
+                </a>
+                <a href="../customer pages/CustomerProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="Help.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-cog"></i></span>
+                    <span class="label">Help</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 id="pageTitle">My Favorites</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="icon"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <h3>Total Favorites</h3>
+                        <div class="value" id="totalFavorites">0</div>
+                    </div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="icon"><i class="fas fa-bookmark"></i></div>
+                    <div>
+                        <h3>Categories</h3>
+                        <div class="value" id="categoriesCount">0</div>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                    <div>
+                        <h3>Bookings Made</h3>
+                        <div class="value" id="bookingsMade">0</div>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="icon"><i class="fas fa-star"></i></div>
+                    <div>
+                        <h3>Avg Rating</h3>
+                        <div class="value" id="avgRating">0.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search favorites by name or category...">
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="tech">Tech & IT Services</option>
+                        <option value="home">Home Services</option>
+                        <option value="creative">Creative Services</option>
+                        <option value="business">Business Services</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="construction">Construction</option>
+                        <option value="cleaning">Cleaning Services</option>
+                        <option value="photography">Photography</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortFilter">Sort by:</label>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="recent">Recently Added</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="name">Name (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Favorites Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-heart"></i>
+                        Favorite Providers
+                    </h2>
+                    <span class="favorites-count" id="favoritesCount">0 Favorites</span>
+                </div>
+
+                <div id="favoritesContainer">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../script/favorites.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

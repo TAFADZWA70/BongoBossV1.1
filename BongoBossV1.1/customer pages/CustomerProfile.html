@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - BongoBoss</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/customerprofile.css" rel="stylesheet" />
+
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="sidebarAvatar">C</div>
+                    <div class="user-details">
+                        <h3 id="sidebarName">Loading...</h3>
+                        <p id="sidebarRole">Customer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../Customer-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../customer pages/browse-services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                    <span class="label">Browse Services</span>
+                </a>
+                <a href="../customer pages/mybookingscustomer.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar"></i></span>
+                    <span class="label">My Bookings</span>
+                </a>
+                <a href="favorites.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-heart"></i></span>
+                    <span class="label">Favorites</span>
+                </a>
+                <a href="../customer pages/CustomerProfile.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">My Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Loading Spinner -->
+            <div class="loading-spinner active" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem; color: #666;">Loading profile...</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div id="profileContent" style="display: none;">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-photo-container">
+                        <div class="profile-photo" id="profilePhoto">
+                            <span id="photoPlaceholder">C</span>
+                            <img id="profilePhotoImg" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <label for="photoUpload" class="photo-upload-btn">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="photoUpload" class="photo-upload-input" accept="image/*">
+                    </div>
+
+                    <h1 class="profile-name" id="profileName">Customer Name</h1>
+                    <p class="profile-email" id="profileEmail">customer@email.com</p>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalBookingsStat">0</div>
+                            <div class="stat-label">Total Bookings</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="completedBookingsStat">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">
+                                <span id="ratingValue">5.0</span>
+                                <div class="rating-stars" id="ratingStars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="stat-label">Customer Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Form and Settings -->
+                <div class="profile-content">
+                    <!-- Personal Information -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-edit icon"></i>
+                            Personal Information
+                        </h2>
+
+                        <form id="profileForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="idNumber">ID Number</label>
+                                    <input type="text" id="idNumber" placeholder="ID Number" readonly style="background: #f5f7fa;">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" placeholder="your.email@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" placeholder="+27 XX XXX XXXX" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" placeholder="Street Address">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" placeholder="City">
+                                </div>
+                                <div class="form-group">
+                                    <label for="province">Province</label>
+                                    <select id="province">
+                                        <option value="">Select Province</option>
+                                        <option value="gauteng">Gauteng</option>
+                                        <option value="western-cape">Western Cape</option>
+                                        <option value="kwazulu-natal">KwaZulu-Natal</option>
+                                        <option value="eastern-cape">Eastern Cape</option>
+                                        <option value="free-state">Free State</option>
+                                        <option value="limpopo">Limpopo</option>
+                                        <option value="mpumalanga">Mpumalanga</option>
+                                        <option value="north-west">North West</option>
+                                        <option value="northern-cape">Northern Cape</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio">About Me</label>
+                                <textarea id="bio" placeholder="Tell us a little about yourself..."></textarea>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Sidebar: Security & Activity -->
+                    <div>
+                        <!-- Security Settings -->
+                        <div class="section-card" style="margin-bottom: 2rem;">
+                            <h2 class="section-title">
+                                <i class="fas fa-shield-alt icon"></i>
+                                Security
+                            </h2>
+
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h4>Change Password</h4>
+                                    <p>Update your account password</p>
+                                </div>
+                                <button class="change-btn" onclick="changePassword()">Change</button>
+                            </div>
+
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h4>Account Status</h4>
+                                    <p id="accountStatus">Active</p>
+                                </div>
+                                <button class="change-btn" style="background: #f5576c;" onclick="deactivateAccount()">Deactivate</button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="section-card">
+                            <h2 class="section-title">
+                                <i class="fas fa-clock icon"></i>
+                                Recent Activity
+                            </h2>
+
+                            <div id="activityLog">
+                                <div class="activity-item">
+                                    <div class="activity-header">
+                                        <span class="activity-title">Profile Created</span>
+                                        <span class="activity-time" id="accountCreatedTime">Just now</span>
+                                    </div>
+                                    <p class="activity-description">Your account was successfully created</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../script/cutomerProfile.js"></script>
+</body>
+</html>

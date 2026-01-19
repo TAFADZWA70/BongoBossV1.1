@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BongoBoss Help & Support - Get assistance with your account">
+    <title>Help & Support - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="../css/provider.css" rel="stylesheet" />
+    <link href="../css/Help.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userRole">Customer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../Customer-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../customer pages/browse-services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                    <span class="label">Browse Services</span>
+                </a>
+                <a href="../customer pages/mybookingscustomer.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">My Bookings</span>
+                </a>
+                <a href="../customer pages/favorites.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-heart"></i></span>
+                    <span class="label">Favorites</span>
+                </a>
+                <a href="../message.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="../customer pages/reviews.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">My Reviews</span>
+                </a>
+                <a href="../customer pages/CustomerProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="Help.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 id="pageTitle">Help & Support</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Quick Help Cards -->
+                <div class="quick-help-grid">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>User Guide</h3>
+                        <p>Learn how to use BongoBoss effectively</p>
+                        <a href="#faq-section" class="help-link">View Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>Contact Support</h3>
+                        <p>Get help from our support team</p>
+                        <a href="#contact-section" class="help-link">Contact Us <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Safety & Security</h3>
+                        <p>Tips for safe transactions</p>
+                        <a href="#safety-section" class="help-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Policies</h3>
+                        <p>Terms, privacy, and refund policies</p>
+                        <a href="#policies-section" class="help-link">Read Policies <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="section-card full-width" id="faq-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                    </div>
+
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I book a service?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>To book a service: 1) Browse available services, 2) Select a service provider, 3) Choose a package, 4) Select date and time, 5) Confirm booking details, 6) Complete payment. You'll receive a confirmation email once your booking is confirmed.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How can I cancel or reschedule a booking?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Go to "My Bookings", select the booking you want to modify, and click the cancel or reschedule button. Please note our cancellation policy: Free cancellation up to 24 hours before the service. Cancellations within 24 hours may incur a fee.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>What payment methods are accepted?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We accept various payment methods including credit/debit cards (Visa, Mastercard), bank transfers, and mobile payments. All transactions are secure and encrypted.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I leave a review?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>After your service is completed, go to "My Bookings", find the completed booking, and click "Leave Review". You can rate the service and provider, and share your experience to help other customers.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>What if I'm not satisfied with a service?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>If you're not satisfied, please contact us within 48 hours of service completion through the contact form below. Provide your booking details and a description of the issue. We'll work with you and the provider to resolve the matter.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I add providers to my favorites?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>When browsing services or viewing a provider's profile, click the heart icon to add them to your favorites. You can view all your favorite providers in the "Favorites" section.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="section-card full-width" id="contact-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-envelope"></i> Contact Support</h2>
+                        <p>Need more help? Send us a message and we'll get back to you within 24 hours.</p>
+                    </div>
+
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">
+                                    <i class="fas fa-user"></i> Full Name
+                                </label>
+                                <input type="text" id="contactName" name="name" required readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactEmail">
+                                    <i class="fas fa-envelope"></i> Email Address
+                                </label>
+                                <input type="email" id="contactEmail" name="email" required readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactSubject">
+                                <i class="fas fa-tag"></i> Subject
+                            </label>
+                            <select id="contactSubject" name="subject" required>
+                                <option value="">Select a topic...</option>
+                                <option value="booking-issue">Booking Issue</option>
+                                <option value="payment-problem">Payment Problem</option>
+                                <option value="account-help">Account Help</option>
+                                <option value="service-quality">Service Quality Concern</option>
+                                <option value="technical-issue">Technical Issue</option>
+                                <option value="feature-request">Feature Request</option>
+                                <option value="general-inquiry">General Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactBookingId">
+                                <i class="fas fa-hashtag"></i> Booking ID (Optional)
+                            </label>
+                            <input type="text" id="contactBookingId" name="bookingId" placeholder="Enter booking ID if relevant">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactMessage">
+                                <i class="fas fa-comment-alt"></i> Message
+                            </label>
+                            <textarea id="contactMessage" name="message" rows="6" required placeholder="Please describe your issue or question in detail..."></textarea>
+                            <div class="char-counter">
+                                <span id="charCount">0</span> / 1000 characters
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                            <button type="button" class="btn-reset" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Message Sent Successfully!</h3>
+                        <p>We've received your message and will respond within 24 hours.</p>
+                        <button onclick="closeSuccessMessage()" class="btn-close-success">Close</button>
+                    </div>
+                </div>
+
+                <!-- Safety Tips Section -->
+                <div class="section-card full-width" id="safety-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-shield-alt"></i> Safety & Security Tips</h2>
+                    </div>
+
+                    <div class="safety-grid">
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h3>Secure Payments</h3>
+                            <p>Always use the platform's secure payment system. Never pay outside the platform or share your banking details directly with providers.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <h3>Verify Providers</h3>
+                            <p>Check provider ratings, reviews, and verification badges before booking. Read feedback from previous customers.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3>Use Platform Messages</h3>
+                            <p>Keep all communication within the BongoBoss messaging system for your protection and to maintain a record of conversations.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <h3>Read Service Details</h3>
+                            <p>Carefully review service descriptions, pricing, and terms before booking. Contact the provider if you have questions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Support</h3>
+                        <p>bongoboss08@gmail.com</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3>Phone Support</h3>
+                        <p>+27 (071) 130 1685</p>
+                        <small>Mon-Fri: 8AM-6PM SAST</small>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Response Time</h3>
+                        <p>Within 24 hours</p>
+                        <small>Usually much faster!</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="../script/Help.js"></script>
+    
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Toggle FAQ
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Open clicked FAQ if it wasn't active
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Character counter
+        const messageTextarea = document.getElementById('contactMessage');
+        const charCount = document.getElementById('charCount');
+
+        if (messageTextarea && charCount) {
+            messageTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+
+                if (count > 1000) {
+                    this.value = this.value.substring(0, 1000);
+                    charCount.textContent = '1000';
+                }
+            });
+        }
+
+        // Reset form
+        function resetForm() {
+            const form = document.getElementById('contactForm');
+            const subject = document.getElementById('contactSubject');
+            const bookingId = document.getElementById('contactBookingId');
+            const message = document.getElementById('contactMessage');
+
+            subject.value = '';
+            bookingId.value = '';
+            message.value = '';
+            charCount.textContent = '0';
+        }
+
+        // Close success message
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').classList.remove('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
