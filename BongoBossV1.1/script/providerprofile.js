@@ -697,7 +697,8 @@ async function loadProviderReviews() {
     const reviewCount = document.getElementById('reviewCount');
 
     try {
-        const reviewsRef = ref(database, `reviews/${providerId}`);
+        // Get ALL reviews from the reviews node
+        const reviewsRef = ref(database, 'reviews');
         const reviewsSnapshot = await get(reviewsRef);
 
         if (!reviewsSnapshot.exists()) {
@@ -711,19 +712,36 @@ async function loadProviderReviews() {
             return;
         }
 
-        const reviewsData = reviewsSnapshot.val();
-        const reviewsArray = Object.entries(reviewsData).map(([id, review]) => ({
-            id,
-            ...review
-        }));
+        const allReviews = reviewsSnapshot.val();
 
-        reviewCount.textContent = reviewsArray.length;
+        // Filter reviews for THIS provider only
+        const providerReviews = Object.entries(allReviews)
+            .map(([id, review]) => ({
+                id,
+                ...review
+            }))
+            .filter(review => review.providerId === providerId && review.status === 'published');
+
+        console.log('Found reviews for provider:', providerReviews.length);
+
+        if (providerReviews.length === 0) {
+            reviewsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <p>No reviews yet</p>
+                </div>
+            `;
+            reviewCount.textContent = '0';
+            return;
+        }
+
+        reviewCount.textContent = providerReviews.length;
         reviewsList.innerHTML = '';
 
         // Sort by date (newest first)
-        reviewsArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+        providerReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        reviewsArray.forEach(review => {
+        providerReviews.forEach(review => {
             const item = createReviewItem(review);
             reviewsList.appendChild(item);
         });
@@ -744,10 +762,9 @@ function createReviewItem(review) {
     const div = document.createElement('div');
     div.className = 'review-item';
 
-    const reviewerName = review.reviewerName || 'Anonymous';
+    const reviewerName = review.customerName || 'Anonymous';
     const reviewerInitial = reviewerName.charAt(0).toUpperCase();
-    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-    const date = formatDate(review.date);
+    const date = formatDate(review.createdAt);
 
     div.innerHTML = `
         <div class="review-header">
@@ -764,12 +781,17 @@ function createReviewItem(review) {
     ).join('')}
             </div>
         </div>
-        <p class="review-text">${review.comment}</p>
+        ${review.title ? `<h4 class="review-title">${review.title}</h4>` : ''}
+        <p class="review-text">${review.review}</p>
+        ${review.serviceName ? `
+            <div class="review-service">
+                <i class="fas fa-briefcase"></i> ${review.serviceName}
+            </div>
+        ` : ''}
     `;
 
     return div;
 }
-
 // Format date
 function formatDate(dateString) {
     if (!dateString) return 'Recently';
