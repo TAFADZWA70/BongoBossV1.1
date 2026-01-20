@@ -38,34 +38,40 @@
                     </div>
                 </div>
             </div>
-
             <nav class="sidebar-nav">
-                <a href="../Customer-dashboard.html" class="nav-item">
+                <a href="../Customer-dashboard.html" class="nav-item" data-page="dashboard">
                     <span class="icon"><i class="fas fa-home"></i></span>
                     <span class="label">Dashboard</span>
                 </a>
-                <a href="../customer pages/browse-services.html" class="nav-item">
+                <a href="../customer pages/browse-services.html" class="nav-item" data-page="browse">
                     <span class="icon"><i class="fas fa-search"></i></span>
                     <span class="label">Browse Services</span>
                 </a>
-                <a href="../customer pages/mybookingscustomer.html" class="nav-item">
+                <a href="../customer pages/mybookingscustomer.html" class="nav-item" data-page="bookings">
                     <span class="icon"><i class="fas fa-calendar-check"></i></span>
                     <span class="label">My Bookings</span>
                 </a>
-                <a href="../customer pages/reviews.html" class="nav-item">
+                <a href="../customer pages/favorites.html" class="nav-item" data-page="favorites">
+                    <span class="icon"><i class="fas fa-heart"></i></span>
+                    <span class="label">Favorites</span>
+                </a>
+                <a href="../message.html" class="nav-item" data-page="messages">
                     <span class="icon"><i class="fas fa-comments"></i></span>
                     <span class="label">Messages</span>
                 </a>
-                <a href="reviews.html" class="nav-item active">
+                <a href="../customer pages/reviews.html" class="nav-item" data-page="reviews">
                     <span class="icon"><i class="fas fa-star"></i></span>
                     <span class="label">My Reviews</span>
                 </a>
-                <a href="../customer pages/CustomerProfile.html" class="nav-item">
+                <a href="../customer pages/CustomerProfile.html" class="nav-item" data-page="profile">
                     <span class="icon"><i class="fas fa-user"></i></span>
                     <span class="label">Profile</span>
                 </a>
+                <a href="../customer pages/Help.html" class="nav-item" data-page="help">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help & Support</span>
+                </a>
             </nav>
-
             <div class="sidebar-footer">
                 <button class="logout-btn" onclick="handleLogout()">
                     <i class="fas fa-sign-out-alt"></i> Logout

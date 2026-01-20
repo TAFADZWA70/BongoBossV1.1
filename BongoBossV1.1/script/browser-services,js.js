@@ -658,7 +658,7 @@ async function handleLogout() {
             await signOut(auth);
             localStorage.removeItem('bongoboss_user');
             sessionStorage.removeItem('bongoboss_user');
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         } catch (error) {
             console.error('Logout error:', error);
             alert('Error logging out. Please try again.');

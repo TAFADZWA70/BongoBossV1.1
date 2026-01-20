@@ -42,7 +42,7 @@ window.addEventListener('load', () => {
             }
         } else {
             console.log('No user authenticated - redirecting to login');
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
         }
     });
 });
@@ -503,7 +503,7 @@ async function handleLogout() {
             localStorage.removeItem('bongoboss_user');
             sessionStorage.removeItem('bongoboss_user');
             console.log('Logout successful');
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         } catch (error) {
             console.error('Logout error:', error);
             alert('Error logging out. Please try again.');
