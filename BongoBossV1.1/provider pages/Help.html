@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BongoBoss Help & Support - Get assistance with your provider account">
+    <title>Help & Support - BongoBoss Provider</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="../css/provider.css" rel="stylesheet" />
+    <link href="../css/Help.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">P</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userRole">Service Provider</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../Provider-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../provider pages/services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-briefcase"></i></span>
+                    <span class="label">My Services</span>
+                </a>
+                <a href="../provider pages/mybookings.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">Bookings</span>
+                </a>
+                <a href="../provider pages/Reports.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                    <span class="label">Reports & Earnings</span>
+                </a>
+                <a href="../message.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="../provider pages/Review.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">Reviews</span>
+                </a>
+                <a href="../provider pages/ProviderProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="../provider pages/Help.html" class="nav-item active" data-page="help">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help & Support</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 id="pageTitle">Help & Support</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Quick Help Cards -->
+                <div class="quick-help-grid">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Provider Guide</h3>
+                        <p>Learn how to manage your services and grow your business</p>
+                        <a href="#faq-section" class="help-link">View Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>Contact Support</h3>
+                        <p>Get help from our provider support team</p>
+                        <a href="#contact-section" class="help-link">Contact Us <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Best Practices</h3>
+                        <p>Tips to maximize your bookings and earnings</p>
+                        <a href="#safety-section" class="help-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Policies</h3>
+                        <p>Provider terms, payout policies, and guidelines</p>
+                        <a href="#policies-section" class="help-link">Read Policies <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="section-card full-width" id="faq-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+                    </div>
+
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I create and manage my service packages?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Go to "My Services" in your dashboard. Click "Add New Service" to create a package. Include detailed descriptions, pricing, duration, and high-quality images. You can edit or deactivate packages at any time. Make your packages clear and comprehensive to attract more bookings.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I accept or decline booking requests?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>When you receive a booking request, you'll get a notification. Go to "Bookings" and review the request details. Accept if you're available, or decline with a polite reason. Try to respond within 24 hours to maintain good customer relations and platform ratings.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>When and how do I receive payments?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Payments are released after service completion and customer confirmation. Payouts are processed weekly to your registered bank account. You can track your earnings in the "Earnings" section. Ensure your banking details are up to date in your profile settings.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How can I improve my profile and attract more customers?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Complete your profile with professional photos, detailed service descriptions, and competitive pricing. Respond quickly to inquiries, maintain high ratings by providing excellent service, and encourage satisfied customers to leave reviews. Keep your availability calendar updated.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>What should I do if a customer cancels a booking?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>If a customer cancels more than 24 hours before the service, you won't receive payment. For cancellations within 24 hours, you may receive partial compensation according to our cancellation policy. The booking status will automatically update in your dashboard.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I handle disputes or issues with customers?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>First, try to resolve the issue directly with the customer through professional communication. If unresolved, contact our support team through the form below within 48 hours. Provide your booking ID and a detailed explanation. We'll mediate to find a fair solution.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>Can I set my own schedule and availability?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! You have full control over your schedule. Update your availability calendar regularly to show when you can accept bookings. Block out dates when you're unavailable. Customers can only book during your available time slots.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>What are the platform fees and commission rates?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>BongoBoss charges a service fee on each completed booking, which is deducted before payout. The exact percentage is detailed in your provider agreement. You can view the breakdown of each transaction in your "Earnings" dashboard. All fees are transparent with no hidden charges.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form Section -->
+                <div class="section-card full-width" id="contact-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-envelope"></i> Contact Support</h2>
+                        <p>Need assistance? Send us a message and our provider support team will respond within 24 hours.</p>
+                    </div>
+
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactName">
+                                    <i class="fas fa-user"></i> Full Name
+                                </label>
+                                <input type="text" id="contactName" name="name" required readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactEmail">
+                                    <i class="fas fa-envelope"></i> Email Address
+                                </label>
+                                <input type="email" id="contactEmail" name="email" required readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactSubject">
+                                <i class="fas fa-tag"></i> Subject
+                            </label>
+                            <select id="contactSubject" name="subject" required>
+                                <option value="">Select a topic...</option>
+                                <option value="booking-management">Booking Management</option>
+                                <option value="payment-payout">Payment & Payout Issue</option>
+                                <option value="account-verification">Account Verification</option>
+                                <option value="service-listing">Service Listing Help</option>
+                                <option value="customer-dispute">Customer Dispute</option>
+                                <option value="technical-issue">Technical Issue</option>
+                                <option value="profile-optimization">Profile Optimization</option>
+                                <option value="policy-question">Policy Question</option>
+                                <option value="feature-request">Feature Request</option>
+                                <option value="general-inquiry">General Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactBookingId">
+                                <i class="fas fa-hashtag"></i> Booking ID (Optional)
+                            </label>
+                            <input type="text" id="contactBookingId" name="bookingId" placeholder="Enter booking ID if relevant">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactMessage">
+                                <i class="fas fa-comment-alt"></i> Message
+                            </label>
+                            <textarea id="contactMessage" name="message" rows="6" required placeholder="Please describe your issue or question in detail..."></textarea>
+                            <div class="char-counter">
+                                <span id="charCount">0</span> / 1000 characters
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                            <button type="button" class="btn-reset" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Message Sent Successfully!</h3>
+                        <p>We've received your message and will respond within 24 hours.</p>
+                        <button onclick="closeSuccessMessage()" class="btn-close-success">Close</button>
+                    </div>
+                </div>
+
+                <!-- Best Practices Section -->
+                <div class="section-card full-width" id="safety-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-line"></i> Best Practices for Success</h2>
+                    </div>
+
+                    <div class="safety-grid">
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3>Maintain Quality Service</h3>
+                            <p>Consistently deliver excellent service to earn positive reviews and repeat customers. Quality service leads to higher ratings and more bookings on the platform.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3>Respond Promptly</h3>
+                            <p>Reply to booking requests and customer messages within 24 hours. Quick response times improve your visibility in search results and customer satisfaction.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <h3>Use Quality Photos</h3>
+                            <p>Upload clear, professional photos of your work and services. High-quality images significantly increase booking rates and help customers make informed decisions.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Professional Communication</h3>
+                            <p>Keep all communication professional and courteous. Use the platform messaging system for all customer interactions to maintain records and protection.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3>Update Your Calendar</h3>
+                            <p>Keep your availability calendar current to avoid double bookings and cancellations. Regular updates help maintain a professional reputation.</p>
+                        </div>
+
+                        <div class="safety-tip">
+                            <div class="tip-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <h3>Competitive Pricing</h3>
+                            <p>Research similar services and price competitively while reflecting your quality and experience. Clear, transparent pricing builds customer trust.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Provider Support Email</h3>
+                        <p>bongoboss08@gmail.com</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3>Phone Support</h3>
+                        <p>+27 (071) 130 1685</p>
+                        <small>Mon-Fri: 8AM-6PM SAST</small>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Response Time</h3>
+                        <p>Within 24 hours</p>
+                        <small>Usually much faster!</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="../script/HelpProvider.js"></script>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Toggle FAQ
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Open clicked FAQ if it wasn't active
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Character counter
+        const messageTextarea = document.getElementById('contactMessage');
+        const charCount = document.getElementById('charCount');
+
+        if (messageTextarea && charCount) {
+            messageTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+
+                if (count > 1000) {
+                    this.value = this.value.substring(0, 1000);
+                    charCount.textContent = '1000';
+                }
+            });
+        }
+
+        // Reset form
+        function resetForm() {
+            const form = document.getElementById('contactForm');
+            const subject = document.getElementById('contactSubject');
+            const bookingId = document.getElementById('contactBookingId');
+            const message = document.getElementById('contactMessage');
+
+            subject.value = '';
+            bookingId.value = '';
+            message.value = '';
+            charCount.textContent = '0';
+        }
+
+        // Close success message
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').classList.remove('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

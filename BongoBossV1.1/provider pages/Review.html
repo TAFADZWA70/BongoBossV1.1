@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BongoBoss Reviews - View customer reviews for your services">
+    <title>My Reviews - BongoBoss Provider</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../css/reviews.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">P</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userRole">Service Provider</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="../Provider-dashboard.html" class="nav-item" data-page="dashboard">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="../provider pages/services.html" class="nav-item" data-page="services">
+                    <span class="icon"><i class="fas fa-briefcase"></i></span>
+                    <span class="label">My Services</span>
+                </a>
+                <a href="../provider pages/mybookings.html" class="nav-item" data-page="bookings">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">Bookings</span>
+                </a>
+                <a href="../provider pages/Reports.html" class="nav-item" data-page="earnings">
+                    <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                    <span class="label">Reports & Earnings</span>
+                </a>
+                <a href="../message.html" class="nav-item" data-page="messages">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="../provider pages/reviews.html" class="nav-item active" data-page="reviews">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">Reviews</span>
+                </a>
+                <a href="../provider pages/ProviderProfile.html" class="nav-item" data-page="profile">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="../provider pages/Help.html" class="nav-item" data-page="help">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help & Support</span>
+                </a>
+                <a href="AccountSwitch.html" class="nav-item" data-page="help">
+                    <span class="icon"><i class="fas fa-user-circle"></i></span>
+                    <span class="label">Switch to Customer</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1>My Reviews</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="icon"><i class="fas fa-star"></i></div>
+                    <div>
+                        <h3>Total Reviews</h3>
+                        <div class="value" id="totalReviews">0</div>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="icon"><i class="fas fa-trophy"></i></div>
+                    <div>
+                        <h3>Average Rating</h3>
+                        <div class="value" id="averageRating">0.0</div>
+                    </div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="icon"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <h3>5-Star Reviews</h3>
+                        <div class="value" id="fiveStarReviews">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating Breakdown -->
+            <div class="rating-breakdown-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> Rating Breakdown</h2>
+                </div>
+                <div class="rating-breakdown-card">
+                    <div class="overall-rating">
+                        <div class="rating-number" id="overallRating">0.0</div>
+                        <div class="rating-stars" id="overallStars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="rating-count" id="ratingCount">0 reviews</div>
+                    </div>
+                    <div class="rating-bars">
+                        <div class="rating-bar-item">
+                            <span class="bar-label">5 <i class="fas fa-star"></i></span>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="bar5" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-count" id="count5">0</span>
+                        </div>
+                        <div class="rating-bar-item">
+                            <span class="bar-label">4 <i class="fas fa-star"></i></span>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="bar4" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-count" id="count4">0</span>
+                        </div>
+                        <div class="rating-bar-item">
+                            <span class="bar-label">3 <i class="fas fa-star"></i></span>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="bar3" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-count" id="count3">0</span>
+                        </div>
+                        <div class="rating-bar-item">
+                            <span class="bar-label">2 <i class="fas fa-star"></i></span>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="bar2" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-count" id="count2">0</span>
+                        </div>
+                        <div class="rating-bar-item">
+                            <span class="bar-label">1 <i class="fas fa-star"></i></span>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="bar1" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-count" id="count1">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">
+                        <i class="fas fa-star"></i> All Reviews
+                    </button>
+                    <button class="filter-tab" data-filter="recent">
+                        <i class="fas fa-clock"></i> Recent
+                    </button>
+                    <button class="filter-tab" data-filter="high">
+                        <i class="fas fa-thumbs-up"></i> High Rated
+                    </button>
+                    <button class="filter-tab" data-filter="low">
+                        <i class="fas fa-thumbs-down"></i> Low Rated
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reviews Content -->
+            <div class="reviews-container">
+                <!-- All Reviews Section -->
+                <div id="allReviewsSection" class="reviews-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-comments"></i> Customer Reviews</h2>
+                        <p>See what customers are saying about your services</p>
+                    </div>
+                    <div id="reviewsList" class="reviews-grid">
+                        <!-- Reviews will be loaded here -->
+                        <div class="empty-state">
+                            <i class="fas fa-star-half-alt"></i>
+                            <h3>No reviews yet</h3>
+                            <p>Customer reviews will appear here once you complete bookings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Review Modal -->
+    <div class="modal" id="viewReviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-star"></i> Review Details</h2>
+                <button class="modal-close" onclick="closeViewReviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="viewReviewBody">
+                <!-- Review details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../script/providerReviews.js"></script>
+</body>
+</html>

@@ -67,7 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AccountSwitch.html" />
     <Content Include="app.js" />
+    <Content Include="css\accountwitch.css" />
     <Content Include="css\booking.css" />
     <Content Include="css\browseservices.css" />
     <Content Include="css\customerprofile.css" />
@@ -83,6 +85,7 @@
     <Content Include="css\portfoliolightbox.css" />
     <Content Include="css\provider.css" />
     <Content Include="css\providerprofile.css" />
+    <Content Include="css\reports.css" />
     <Content Include="css\reviews.css" />
     <Content Include="css\signup.css" />
     <Content Include="css\style.css" />
@@ -111,16 +114,22 @@
     <Content Include="img\WHATSAPP.png" />
     <Content Include="login.html" />
     <Content Include="message.html" />
+    <Content Include="provider pages\Help.html" />
     <Content Include="provider pages\mybookings.html" />
     <Content Include="provider pages\Portfolio&amp;Services-Management.html" />
     <Content Include="customer pages\provider-profile.html" />
+    <Content Include="provider pages\ProviderProfile.html" />
+    <Content Include="provider pages\Reports.html" />
+    <Content Include="provider pages\Review.html" />
     <Content Include="provider-dashboard.html" />
+    <Content Include="script\accountswitch.js" />
     <Content Include="script\booking.js" />
     <Content Include="script\browser-services,js.js" />
     <Content Include="script\customer-dashboard.js" />
     <Content Include="script\cutomerProfile.js" />
     <Content Include="script\favorites.js" />
     <Content Include="script\Help.js" />
+    <Content Include="script\HelpProvider.js" />
     <Content Include="script\jobcount.js" />
     <Content Include="script\login.js" />
     <Content Include="script\message.js" />
@@ -130,6 +139,9 @@
     <Content Include="script\portfoliov2.js" />
     <Content Include="script\provider-dashboard.js" />
     <Content Include="script\providerprofile.js" />
+    <Content Include="script\providerprofiles.js" />
+    <Content Include="script\providerReviews.js" />
+    <Content Include="script\reports.js" />
     <Content Include="script\reviews.js" />
     <Content Include="script\signup.js" />
     <Content Include="SignUp.html" />

@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Switch between Provider and Customer accounts - BongoBoss">
+    <title>Switch Account - BongoBoss</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <link rel="apple-touch-icon" href="../img/favicon2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="css/accountwitch.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar - Will be dynamically updated -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="/img/BongoBossLogo.png" alt="BongoBoss">
+                    <h2>BongoBoss</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userCategory">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Provider Navigation -->
+            <nav class="sidebar-nav provider-nav" id="providerNav" style="display: none;">
+                <a href="provider-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-chart-line"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="provider pages/Portfolio&Services-Management.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-briefcase"></i></span>
+                    <span class="label">Portfolio & Services</span>
+                </a>
+                <a href="provider pages/mybookings.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                    <span class="label">Bookings</span>
+                </a>
+                <a href="provider pages/Reports.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                    <span class="label">Reports & Earnings</span>
+                </a>
+                <a href="provider pages/Review.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">Reviews</span>
+                </a>
+                <a href="message.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="provider pages/ProviderProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="provider pages/Help.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help & Support</span>
+                </a>
+                <a href="provider pages/AccountSwitch.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-exchange-alt"></i></span>
+                    <span class="label">Switch Account</span>
+                </a>
+            </nav>
+
+            <!-- Customer Navigation -->
+            <nav class="sidebar-nav customer-nav" id="customerNav" style="display: none;">
+                <a href="Customer-dashboard.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                    <span class="label">Dashboard</span>
+                </a>
+                <a href="customer pages/browse-services.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-search"></i></span>
+                    <span class="label">Browse Services</span>
+                </a>
+                <a href="customer pages/mybookingscustomer.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="label">My Bookings</span>
+                </a>
+                <a href="customer pages/favorites.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-heart"></i></span>
+                    <span class="label">Favorites</span>
+                </a>
+                <a href="message.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-comments"></i></span>
+                    <span class="label">Messages</span>
+                </a>
+                <a href="customer pages/reviews.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-star"></i></span>
+                    <span class="label">My Reviews</span>
+                </a>
+                <a href="customer pages/CustomerProfile.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-user"></i></span>
+                    <span class="label">Profile</span>
+                </a>
+                <a href="customer pages/Help.html" class="nav-item">
+                    <span class="icon"><i class="fas fa-question-circle"></i></span>
+                    <span class="label">Help & Support</span>
+                </a>
+                <a href="customer pages/AccountSwitch.html" class="nav-item active">
+                    <span class="icon"><i class="fas fa-exchange-alt"></i></span>
+                    <span class="label">Switch Account</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1>Switch Account Mode</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Account Info -->
+            <div class="current-account-card">
+                <div class="account-badge" id="currentAccountBadge">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="account-info">
+                    <p class="label">Currently Active As</p>
+                    <h2 id="currentAccountType">Loading...</h2>
+                    <p class="description" id="currentDescription">Loading your account information...</p>
+                </div>
+            </div>
+
+            <!-- Switch Options -->
+            <div class="switch-section">
+                <h2 class="section-title">Switch Account Mode</h2>
+                <p class="section-description">Toggle between provider and customer modes to access different features</p>
+
+                <div class="switch-options-grid">
+                    <!-- Provider Mode Card -->
+                    <div class="switch-card provider-card" id="providerCard">
+                        <div class="card-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Provider Mode</h3>
+                        <p>Manage your services, bookings, and earnings</p>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> Manage portfolio</li>
+                            <li><i class="fas fa-check"></i> Accept bookings</li>
+                            <li><i class="fas fa-check"></i> Track earnings</li>
+                            <li><i class="fas fa-check"></i> View reviews</li>
+                        </ul>
+                        <button class="switch-btn" id="switchToProviderBtn" onclick="switchToProvider()">
+                            <i class="fas fa-exchange-alt"></i> Switch to Provider
+                        </button>
+                    </div>
+
+                    <!-- Customer Mode Card -->
+                    <div class="switch-card customer-card" id="customerCard">
+                        <div class="card-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h3>Customer Mode</h3>
+                        <p>Browse and book services from providers</p>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> Browse services</li>
+                            <li><i class="fas fa-check"></i> Book providers</li>
+                            <li><i class="fas fa-check"></i> Track orders</li>
+                            <li><i class="fas fa-check"></i> Leave reviews</li>
+                        </ul>
+                        <button class="switch-btn" id="switchToCustomerBtn" onclick="switchToCustomer()">
+                            <i class="fas fa-exchange-alt"></i> Switch to Customer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <div class="info-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="info-content">
+                    <h4>How Account Switching Works</h4>
+                    <p>You can seamlessly switch between provider and customer modes at any time. Your data and settings for each mode are preserved, so you can easily switch back and forth without losing any information.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="script/accountswitch.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('bongoboss_user');
+                sessionStorage.removeItem('bongoboss_user');
+                window.location.href = '../login.html';
+            }
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(event.target) &&
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
