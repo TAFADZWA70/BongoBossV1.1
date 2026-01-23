@@ -397,6 +397,8 @@ body {
 
 .info-content {
     flex: 1;
+    min-width: 0; /* ← NEW LINE ADDED */
+    overflow: hidden; /* ← NEW LINE ADDED */
 }
 
 .info-label {
@@ -410,6 +412,10 @@ body {
     font-size: 1rem;
     color: #333;
     font-weight: 600;
+    word-wrap: break-word; /* ← NEW LINE ADDED */
+    word-break: break-word; /* ← NEW LINE ADDED */
+    overflow-wrap: break-word; /* ← NEW LINE ADDED */
+    hyphens: auto; /* ← NEW LINE ADDED */
 }
 
 /* Skills */
