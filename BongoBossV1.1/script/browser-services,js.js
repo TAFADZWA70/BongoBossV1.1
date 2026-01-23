@@ -145,63 +145,69 @@ async function loadAllProviders() {
         const usersData = usersSnapshot.val();
         allProviders = [];
 
-        // Get all providers with their services
+        // Get all users who have services (regardless of current accountType)
         for (const [idNumber, userData] of Object.entries(usersData)) {
-            if (userData.accountType === 'provider') {
-                // Get provider's service packages
-                const servicesRef = ref(database, `servicePackages/${idNumber}`);
-                const servicesSnapshot = await get(servicesRef);
+            // Check if user has provider profile OR has service packages
+            // This allows showing services even when user is in customer mode
+            const hasProviderProfile = userData.hasProviderProfile || userData.serviceCategory;
 
-                if (servicesSnapshot.exists()) {
-                    const servicesData = servicesSnapshot.val();
+            // Try to get service packages for this user
+            const servicesRef = ref(database, `servicePackages/${idNumber}`);
+            const servicesSnapshot = await get(servicesRef);
 
-                    // Get provider's portfolio for images
-                    const portfolioRef = ref(database, `portfolios/${idNumber}`);
-                    const portfolioSnapshot = await get(portfolioRef);
-                    let images = [];
-                    let allPortfolioImages = [];
+            // If user has services, show them (regardless of current accountType)
+            if (servicesSnapshot.exists() && hasProviderProfile) {
+                const servicesData = servicesSnapshot.val();
 
-                    if (portfolioSnapshot.exists()) {
-                        const portfolioData = portfolioSnapshot.val();
+                // Get provider's portfolio for images
+                const portfolioRef = ref(database, `portfolios/${idNumber}`);
+                const portfolioSnapshot = await get(portfolioRef);
+                let images = [];
+                let allPortfolioImages = [];
 
-                        // Collect all images from all portfolios
-                        Object.values(portfolioData).forEach(portfolio => {
-                            if (portfolio.images && Array.isArray(portfolio.images)) {
-                                portfolio.images.forEach(img => {
-                                    allPortfolioImages.push({
-                                        src: img.data,
-                                        title: portfolio.title || 'Portfolio item',
-                                        description: portfolio.description || ''
-                                    });
+                if (portfolioSnapshot.exists()) {
+                    const portfolioData = portfolioSnapshot.val();
+
+                    // Collect all images from all portfolios
+                    Object.values(portfolioData).forEach(portfolio => {
+                        if (portfolio.images && Array.isArray(portfolio.images)) {
+                            portfolio.images.forEach(img => {
+                                allPortfolioImages.push({
+                                    src: img.data,
+                                    title: portfolio.title || 'Portfolio item',
+                                    description: portfolio.description || ''
                                 });
-                            }
-                        });
-
-                        // Get first image for thumbnail
-                        if (allPortfolioImages.length > 0) {
-                            images = [allPortfolioImages[0].src];
+                            });
                         }
-                    }
-
-                    // Create provider entry for each service package
-                    Object.entries(servicesData).forEach(([serviceId, service]) => {
-                        allProviders.push({
-                            providerId: idNumber,
-                            providerName: userData.fullName,
-                            category: userData.serviceCategory,
-                            serviceId: serviceId,
-                            serviceName: service.packageName,
-                            description: service.description,
-                            price: service.price,
-                            features: service.features || [],
-                            deliveryTime: service.deliveryTime,
-                            image: images.length > 0 ? images[0] : null,
-                            portfolioImages: allPortfolioImages, // Store all portfolio images
-                            rating: userData.rating || (4 + Math.random()).toFixed(1),
-                            createdAt: service.createdAt || Date.now()
-                        });
                     });
+
+                    // Get first image for thumbnail
+                    if (allPortfolioImages.length > 0) {
+                        images = [allPortfolioImages[0].src];
+                    }
                 }
+
+                // Create provider entry for each service package
+                Object.entries(servicesData).forEach(([serviceId, service]) => {
+                    allProviders.push({
+                        providerId: idNumber,
+                        providerName: userData.fullName,
+                        // Use serviceCategory if available, otherwise use a default
+                        category: userData.serviceCategory || 'general',
+                        serviceId: serviceId,
+                        serviceName: service.packageName,
+                        description: service.description,
+                        price: service.price,
+                        features: service.features || [],
+                        deliveryTime: service.deliveryTime,
+                        image: images.length > 0 ? images[0] : null,
+                        portfolioImages: allPortfolioImages,
+                        rating: userData.rating || (4 + Math.random()).toFixed(1),
+                        createdAt: service.createdAt || Date.now(),
+                        // Store current account type for reference (but don't filter by it)
+                        currentAccountType: userData.accountType
+                    });
+                });
             }
         }
 
@@ -681,7 +687,8 @@ function getCategoryDisplayName(category) {
         'maintenance': 'Maintenance',
         'photography': 'Photography',
         'property': 'Real Estate',
-        'hotel': 'Hotel/Tourism'
+        'hotel': 'Hotel/Tourism',
+        'general': 'General Services'
     };
 
     return categoryMap[category] || category;

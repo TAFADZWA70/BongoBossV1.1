@@ -1,7 +1,7 @@
 ﻿// Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, get, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, get, set, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,11 +30,174 @@ let isFavorited = false;
 let currentImageIndex = 0;
 let portfolioImages = [];
 let currentModalImages = [];
+let providerLocation = null;
 
 // Get provider ID from URL
 function getProviderIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
+}
+
+// Detect and update provider location
+async function detectAndUpdateProviderLocation() {
+    if (!providerId) return;
+
+    console.log('Detecting location for provider:', providerId);
+
+    // Check if provider already has location data
+    if (providerData.location && providerData.location.city && providerData.location.province) {
+        providerLocation = providerData.location;
+        updateLocationDisplay();
+        return;
+    }
+
+    // Try geolocation detection
+    if (navigator.geolocation) {
+        try {
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            });
+
+            const { latitude, longitude } = position.coords;
+            await reverseGeocode(latitude, longitude);
+        } catch (error) {
+            console.log('Geolocation failed, trying IP-based detection:', error.message);
+            await detectLocationByIP();
+        }
+    } else {
+        await detectLocationByIP();
+    }
+}
+
+// Reverse geocode coordinates
+async function reverseGeocode(lat, lon) {
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`,
+            {
+                headers: {
+                    'User-Agent': 'BongoBoss/1.0'
+                }
+            }
+        );
+
+        if (!response.ok) throw new Error('Geocoding failed');
+
+        const data = await response.json();
+
+        if (data && data.address) {
+            const address = data.address;
+
+            providerLocation = {
+                latitude: lat,
+                longitude: lon,
+                city: address.city || address.town || address.village || address.suburb || '',
+                province: mapToSouthAfricanProvince(address.state || address.province || ''),
+                country: address.country || 'South Africa'
+            };
+
+            await saveProviderLocation();
+            updateLocationDisplay();
+        }
+    } catch (error) {
+        console.error('Reverse geocoding error:', error);
+        await detectLocationByIP();
+    }
+}
+
+// IP-based location detection
+async function detectLocationByIP() {
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) throw new Error('IP location failed');
+
+        const data = await response.json();
+
+        if (data) {
+            providerLocation = {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                city: data.city || '',
+                province: mapToSouthAfricanProvince(data.region || ''),
+                country: data.country_name || 'South Africa'
+            };
+
+            await saveProviderLocation();
+            updateLocationDisplay();
+        }
+    } catch (error) {
+        console.error('IP location error:', error);
+        // Fallback to default
+        updateLocationDisplay();
+    }
+}
+
+// Map province names
+function mapToSouthAfricanProvince(provinceName) {
+    if (!provinceName) return '';
+
+    const provinceMap = {
+        'gauteng': 'Gauteng',
+        'western cape': 'Western Cape',
+        'eastern cape': 'Eastern Cape',
+        'northern cape': 'Northern Cape',
+        'free state': 'Free State',
+        'kwazulu-natal': 'KwaZulu-Natal',
+        'kwazulu natal': 'KwaZulu-Natal',
+        'limpopo': 'Limpopo',
+        'mpumalanga': 'Mpumalanga',
+        'north west': 'North West',
+        'northwest': 'North West',
+        'kzn': 'KwaZulu-Natal',
+        'wc': 'Western Cape',
+        'ec': 'Eastern Cape',
+        'nc': 'Northern Cape',
+        'fs': 'Free State',
+        'gp': 'Gauteng',
+        'lp': 'Limpopo',
+        'mp': 'Mpumalanga',
+        'nw': 'North West'
+    };
+
+    const normalized = provinceName.toLowerCase().trim();
+    return provinceMap[normalized] || provinceName;
+}
+
+// Save provider location to database
+async function saveProviderLocation() {
+    if (!providerLocation || !providerId) return;
+
+    try {
+        const userRef = ref(database, `users/${providerId}`);
+        await update(userRef, {
+            location: {
+                ...providerLocation,
+                updatedAt: new Date().toISOString()
+            }
+        });
+        console.log('Provider location saved');
+    } catch (error) {
+        console.error('Error saving location:', error);
+    }
+}
+
+// Update location display
+function updateLocationDisplay() {
+    const locationElement = document.getElementById('providerLocation');
+
+    if (providerLocation && providerLocation.city && providerLocation.province) {
+        locationElement.textContent = `${providerLocation.city}, ${providerLocation.province}, South Africa`;
+    } else if (providerData.city && providerData.province) {
+        locationElement.textContent = `${providerData.city}, ${providerData.province}, South Africa`;
+    } else if (providerData.location) {
+        locationElement.textContent = providerData.location;
+    } else {
+        locationElement.textContent = 'South Africa';
+    }
 }
 
 // Add portfolio styles (call once on page load)
@@ -151,6 +314,9 @@ window.addEventListener('load', async () => {
 
         // Load provider data
         await loadProviderData();
+
+        // Detect and update location after provider data is loaded
+        await detectAndUpdateProviderLocation();
     });
 });
 
@@ -317,7 +483,14 @@ function displayProviderInfo() {
     // Contact information
     document.getElementById('providerEmail').textContent = providerData.email || 'Not provided';
     document.getElementById('providerPhone').textContent = providerData.phone || 'Not provided';
-    document.getElementById('providerLocation').textContent = providerData.location || 'Johannesburg, SA';
+
+    // Location will be updated by detectAndUpdateProviderLocation()
+    // Set initial value
+    if (providerData.city && providerData.province) {
+        document.getElementById('providerLocation').textContent = `${providerData.city}, ${providerData.province}, South Africa`;
+    } else {
+        document.getElementById('providerLocation').textContent = providerData.location || 'South Africa';
+    }
 
     // Bio
     const bioText = providerData.bio ||
@@ -792,6 +965,7 @@ function createReviewItem(review) {
 
     return div;
 }
+
 // Format date
 function formatDate(dateString) {
     if (!dateString) return 'Recently';
@@ -895,7 +1069,7 @@ async function handleLogout() {
             await signOut(auth);
             localStorage.removeItem('bongoboss_user');
             sessionStorage.removeItem('bongoboss_user');
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         } catch (error) {
             console.error('Logout error:', error);
             alert('Error logging out. Please try again.');

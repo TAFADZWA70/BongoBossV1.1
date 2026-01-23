@@ -27,6 +27,7 @@ console.log('Firebase initialized successfully!');
 let currentUserData = null;
 let currentIdNumber = null;
 let originalFormData = null;
+let userLocation = null;
 
 // Check authentication on load
 onAuthStateChanged(auth, async (user) => {
@@ -34,6 +35,7 @@ onAuthStateChanged(auth, async (user) => {
         console.log('User authenticated:', user.uid);
         try {
             await loadUserData(user.uid);
+            await detectUserLocation(); // Detect location after loading user
             hideLoading();
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -45,6 +47,185 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = '../Login.html';
     }
 });
+
+// Detect user location using geolocation API
+async function detectUserLocation() {
+    console.log('Detecting user location...');
+
+    if (!navigator.geolocation) {
+        console.log('Geolocation not supported');
+        return;
+    }
+
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        });
+
+        const { latitude, longitude } = position.coords;
+        console.log('Location detected:', latitude, longitude);
+
+        // Reverse geocode to get location details
+        await reverseGeocode(latitude, longitude);
+
+    } catch (error) {
+        console.log('Geolocation error:', error.message);
+        // If geolocation fails, try IP-based location
+        await detectLocationByIP();
+    }
+}
+
+// Reverse geocode coordinates to get address details
+async function reverseGeocode(lat, lon) {
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`,
+            {
+                headers: {
+                    'User-Agent': 'BongoBoss/1.0'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Geocoding failed');
+        }
+
+        const data = await response.json();
+        console.log('Geocoding result:', data);
+
+        if (data && data.address) {
+            const address = data.address;
+
+            userLocation = {
+                latitude: lat,
+                longitude: lon,
+                city: address.city || address.town || address.village || address.suburb || '',
+                province: mapToSouthAfricanProvince(address.state || address.province || ''),
+                country: address.country || 'South Africa',
+                fullAddress: data.display_name || ''
+            };
+
+            console.log('User location:', userLocation);
+
+            // Update form fields if they're empty
+            updateLocationFields();
+        }
+
+    } catch (error) {
+        console.error('Reverse geocoding error:', error);
+        // Fallback to IP-based location
+        await detectLocationByIP();
+    }
+}
+
+// Detect location by IP address as fallback
+async function detectLocationByIP() {
+    try {
+        console.log('Trying IP-based location detection...');
+
+        const response = await fetch('https://ipapi.co/json/');
+
+        if (!response.ok) {
+            throw new Error('IP location failed');
+        }
+
+        const data = await response.json();
+        console.log('IP location result:', data);
+
+        if (data) {
+            userLocation = {
+                latitude: data.latitude,
+                longitude: data.longitude,
+                city: data.city || '',
+                province: mapToSouthAfricanProvince(data.region || ''),
+                country: data.country_name || 'South Africa',
+                fullAddress: `${data.city}, ${data.region}, ${data.country_name}`
+            };
+
+            console.log('IP-based location:', userLocation);
+            updateLocationFields();
+        }
+
+    } catch (error) {
+        console.error('IP location error:', error);
+        console.log('Location detection failed, using default or stored values');
+    }
+}
+
+// Map various province names to standard South African provinces
+function mapToSouthAfricanProvince(provinceName) {
+    if (!provinceName) return '';
+
+    const provinceMap = {
+        // Full names
+        'gauteng': 'Gauteng',
+        'western cape': 'Western Cape',
+        'eastern cape': 'Eastern Cape',
+        'northern cape': 'Northern Cape',
+        'free state': 'Free State',
+        'kwazulu-natal': 'KwaZulu-Natal',
+        'kwazulu natal': 'KwaZulu-Natal',
+        'limpopo': 'Limpopo',
+        'mpumalanga': 'Mpumalanga',
+        'north west': 'North West',
+        'northwest': 'North West',
+
+        // Alternative spellings
+        'kzn': 'KwaZulu-Natal',
+        'wc': 'Western Cape',
+        'ec': 'Eastern Cape',
+        'nc': 'Northern Cape',
+        'fs': 'Free State',
+        'gp': 'Gauteng',
+        'lp': 'Limpopo',
+        'mp': 'Mpumalanga',
+        'nw': 'North West'
+    };
+
+    const normalized = provinceName.toLowerCase().trim();
+    return provinceMap[normalized] || provinceName;
+}
+
+// Update location fields in the form
+function updateLocationFields() {
+    if (!userLocation) return;
+
+    const cityField = document.getElementById('city');
+    const provinceField = document.getElementById('province');
+
+    // Only update if fields are empty
+    if (!cityField.value && userLocation.city) {
+        cityField.value = userLocation.city;
+        console.log('Set city to:', userLocation.city);
+    }
+
+    if (!provinceField.value && userLocation.province) {
+        provinceField.value = userLocation.province;
+        console.log('Set province to:', userLocation.province);
+    }
+
+    // Store coordinates if available
+    if (userLocation.latitude && userLocation.longitude && currentIdNumber) {
+        // Save location to database
+        const userRef = ref(database, `users/${currentIdNumber}`);
+        update(userRef, {
+            location: {
+                latitude: userLocation.latitude,
+                longitude: userLocation.longitude,
+                city: userLocation.city,
+                province: userLocation.province,
+                updatedAt: new Date().toISOString()
+            }
+        }).catch(error => {
+            console.error('Error saving location:', error);
+        });
+    }
+}
 
 // Load user data from database
 async function loadUserData(uid) {
@@ -132,7 +313,7 @@ function displayUserData() {
     document.getElementById('bio').value = currentUserData.bio || '';
     document.getElementById('yearsExperience').value = currentUserData.yearsExperience || '';
     document.getElementById('serviceRadius').value = currentUserData.serviceRadius || '';
-    
+
     // Display service categories
     if (currentUserData.serviceCategories && Array.isArray(currentUserData.serviceCategories)) {
         document.getElementById('serviceCategories').value = currentUserData.serviceCategories.join(', ');

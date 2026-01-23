@@ -105,10 +105,6 @@ async function switchToProvider() {
         return;
     }
 
-    if (!confirm('Switch to Provider mode? You will be redirected to the provider dashboard.')) {
-        return;
-    }
-
     const userInfo = getCurrentUserInfo();
     if (!userInfo || !userInfo.idNumber) {
         alert('User information not found. Please login again.');
@@ -117,22 +113,84 @@ async function switchToProvider() {
     }
 
     try {
-        console.log('Switching to provider mode...');
-
-        // Update button state
-        const switchBtn = document.getElementById('switchToProviderBtn');
-        switchBtn.disabled = true;
-        switchBtn.textContent = 'Switching...';
-
-        // Update account type in database
+        // Check if user has provider profile data
         const userRef = ref(database, `users/${userInfo.idNumber}`);
-        await update(userRef, {
-            accountType: 'provider',
-            lastModified: new Date().toISOString()
-        });
+        const userSnapshot = await get(userRef);
 
-        // Update stored user info
-        userInfo.accountType = 'provider';
+        if (!userSnapshot.exists()) {
+            alert('User data not found. Please login again.');
+            window.location.href = '../login.html';
+            return;
+        }
+
+        const userData = userSnapshot.val();
+
+        // Check if user needs to set up provider profile
+        if (!userData.serviceCategory && !userData.hasProviderProfile) {
+            // Ask for service category
+            const category = prompt(
+                'To switch to Provider mode, please select your service category:\n\n' +
+                'Enter one of:\n' +
+                '- Home Services\n' +
+                '- Professional Services\n' +
+                '- Health & Wellness\n' +
+                '- Education & Training\n' +
+                '- Events & Entertainment\n' +
+                '- Automotive\n' +
+                '- Other'
+            );
+
+            if (!category || category.trim() === '') {
+                alert('Service category is required to become a provider.');
+                return;
+            }
+
+            // Confirm the switch
+            if (!confirm(`Switch to Provider mode as "${category}"?`)) {
+                return;
+            }
+
+            // Update button state
+            const switchBtn = document.getElementById('switchToProviderBtn');
+            switchBtn.disabled = true;
+            switchBtn.textContent = 'Setting up...';
+
+            // Update with service category
+            await update(userRef, {
+                accountType: 'provider',
+                serviceCategory: category.trim(),
+                hasProviderProfile: true,
+                lastModified: new Date().toISOString()
+            });
+
+            // Update stored user info
+            userInfo.accountType = 'provider';
+            userInfo.serviceCategory = category.trim();
+            userInfo.hasProviderProfile = true;
+        } else {
+            // User already has provider profile
+            if (!confirm('Switch to Provider mode? You will be redirected to the provider dashboard.')) {
+                return;
+            }
+
+            console.log('Switching to provider mode...');
+
+            // Update button state
+            const switchBtn = document.getElementById('switchToProviderBtn');
+            switchBtn.disabled = true;
+            switchBtn.textContent = 'Switching...';
+
+            // Update account type in database (preserve existing provider data)
+            await update(userRef, {
+                accountType: 'provider',
+                lastModified: new Date().toISOString()
+            });
+
+            // Update stored user info
+            userInfo.accountType = 'provider';
+        }
+
+        // Update localStorage/sessionStorage
         if (localStorage.getItem('bongoboss_user')) {
             localStorage.setItem('bongoboss_user', JSON.stringify(userInfo));
         } else {
@@ -163,7 +221,7 @@ async function switchToCustomer() {
         return;
     }
 
-    if (!confirm('Switch to Customer mode? You will be redirected to the customer dashboard.')) {
+    if (!confirm('Switch to Customer mode? Your provider profile and services will remain saved. You will be redirected to the customer dashboard.')) {
         return;
     }
 
@@ -182,11 +240,12 @@ async function switchToCustomer() {
         switchBtn.disabled = true;
         switchBtn.textContent = 'Switching...';
 
-        // Update account type in database
+        // Update account type in database (PRESERVE provider data like serviceCategory)
         const userRef = ref(database, `users/${userInfo.idNumber}`);
         await update(userRef, {
             accountType: 'customer',
             lastModified: new Date().toISOString()
+            // Note: We're NOT removing serviceCategory or hasProviderProfile
         });
 
         // Update stored user info
